@@ -125,7 +125,6 @@ export default function CategoriesSection() {
 
         <Reveal delay={0.08}>
           <div className="mt-10 overflow-hidden rounded-[28px] border border-carbone/10 bg-white/65 shadow-[0_45px_110px_-58px_rgba(11,13,16,.48)] backdrop-blur-xl sm:mt-12 lg:mt-16 lg:rounded-[32px]">
-            {/* Mobile scanner */}
             <div className="lg:hidden">
               <div className="no-scrollbar flex gap-2 overflow-x-auto border-b border-carbone/10 bg-white/45 p-3">
                 {ordered.map((cat, i) => {
@@ -150,9 +149,9 @@ export default function CategoriesSection() {
                 })}
               </div>
 
-              <div className="relative min-h-[430px] overflow-hidden bg-[#12171c] sm:min-h-[500px]">
+              <div className="relative min-h-[470px] overflow-hidden bg-[#12171c] sm:min-h-[540px]">
                 <div className="blueprint pointer-events-none absolute inset-0 opacity-30" />
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,rgba(116,131,143,.32),transparent_34%),linear-gradient(180deg,#222a31_0%,#111419_100%)]" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(116,131,143,.32),transparent_36%),linear-gradient(180deg,#222a31_0%,#111419_100%)]" />
                 <span className="absolute right-5 top-4 z-10 font-display text-[5.5rem] font-black leading-none text-white/[0.045]">
                   {String(active + 1).padStart(2, '0')}
                 </span>
@@ -164,18 +163,18 @@ export default function CategoriesSection() {
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeCategory}
-                    initial={{ opacity: 0, y: 18, scale: 0.95 }}
+                    initial={{ opacity: 0, y: 18, scale: 0.94 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -10, scale: 1.03 }}
+                    exit={{ opacity: 0, y: -10, scale: 1.02 }}
                     transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
-                    className="absolute inset-[16%_8%_30%]"
+                    className="absolute inset-x-[12%] bottom-[34%] top-[15%] sm:inset-x-[15%] sm:bottom-[31%] sm:top-[14%]"
                   >
                     <Image
                       src={coverFor(activeCategory)}
                       alt={activeCategory}
                       fill
-                      sizes="92vw"
-                      className="object-contain drop-shadow-[0_34px_30px_rgba(0,0,0,.72)]"
+                      sizes="76vw"
+                      className="object-contain object-center drop-shadow-[0_34px_30px_rgba(0,0,0,.72)]"
                     />
                   </motion.div>
                 </AnimatePresence>
@@ -212,8 +211,7 @@ export default function CategoriesSection() {
               </div>
             </div>
 
-            {/* Desktop atlas */}
-            <div className="hidden min-h-[650px] lg:grid lg:grid-cols-[350px_minmax(0,1fr)]">
+            <div className="hidden min-h-[680px] lg:grid lg:grid-cols-[350px_minmax(0,1fr)]">
               <div className="relative border-r border-carbone/10 bg-[linear-gradient(180deg,rgba(241,243,244,.92),rgba(215,220,223,.88))] p-5 xl:p-6">
                 <div className="mb-5 flex items-center justify-between px-3 pt-2">
                   <span className="text-[9px] font-bold uppercase tracking-[0.24em] text-carbone/42">Operating zones</span>
@@ -260,7 +258,7 @@ export default function CategoriesSection() {
               </div>
 
               <div className="relative overflow-hidden bg-[#101419]">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_56%_40%,rgba(108,124,137,.35),transparent_30%),linear-gradient(135deg,#283139_0%,#151a1f_42%,#0b0e11_100%)]" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_56%_39%,rgba(108,124,137,.35),transparent_32%),linear-gradient(135deg,#283139_0%,#151a1f_42%,#0b0e11_100%)]" />
                 <div className="blueprint pointer-events-none absolute inset-0 opacity-35" />
                 <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-white/[0.07] to-transparent" />
                 <div className="pointer-events-none absolute bottom-[-8rem] left-1/2 h-72 w-[70%] -translate-x-1/2 rounded-full bg-rosso/[0.1] blur-[120px]" />
@@ -276,18 +274,18 @@ export default function CategoriesSection() {
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeCategory}
-                    initial={{ opacity: 0, x: 26, scale: 0.94, filter: 'blur(6px)' }}
+                    initial={{ opacity: 0, x: 26, scale: 0.93, filter: 'blur(6px)' }}
                     animate={{ opacity: 1, x: 0, scale: 1, filter: 'blur(0px)' }}
-                    exit={{ opacity: 0, x: -18, scale: 1.02, filter: 'blur(5px)' }}
+                    exit={{ opacity: 0, x: -18, scale: 1.01, filter: 'blur(5px)' }}
                     transition={{ duration: 0.48, ease: [0.16, 1, 0.3, 1] }}
-                    className="absolute inset-[12%_9%_26%]"
+                    className="absolute inset-x-[14%] bottom-[30%] top-[12%] xl:inset-x-[17%] xl:bottom-[28%] xl:top-[13%]"
                   >
                     <Image
                       src={coverFor(activeCategory)}
                       alt={activeCategory}
                       fill
-                      sizes="65vw"
-                      className="object-contain drop-shadow-[0_46px_34px_rgba(0,0,0,.78)]"
+                      sizes="48vw"
+                      className="object-contain object-center drop-shadow-[0_46px_34px_rgba(0,0,0,.78)]"
                     />
                   </motion.div>
                 </AnimatePresence>
