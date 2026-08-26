@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Crosshair } from 'lucide-react';
 import { categories, products, countByCategory } from '@/data/products';
 import { categoryIconFor } from '@/lib/catalog';
@@ -35,10 +34,10 @@ export default function CategoriesSection() {
   return (
     <section data-nav-theme="light" className="relative overflow-hidden bg-[#dfe3e5] py-16 text-carbone sm:py-20 md:py-28 lg:py-36">
       <div className="pointer-events-none absolute inset-0">
-        <Image src="/images/hero-reparti.webp" alt="" fill sizes="100vw" className="object-cover opacity-[0.06] saturate-0" />
-        <div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(255,255,255,.96)_0%,rgba(229,232,234,.9)_44%,rgba(194,200,205,.84)_100%)]" />
+        <Image src="/images/hero-reparti.webp" alt="" fill sizes="100vw" className="object-cover opacity-[0.05] saturate-0" />
+        <div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(255,255,255,.97)_0%,rgba(229,232,234,.92)_44%,rgba(194,200,205,.86)_100%)]" />
       </div>
-      <div className="blueprint-light pointer-events-none absolute inset-0 opacity-38" />
+      <div className="blueprint-light pointer-events-none absolute inset-0 opacity-36" />
 
       <div className="container-ac relative">
         <div className="grid gap-8 lg:grid-cols-[1fr_370px] lg:items-end">
@@ -58,42 +57,38 @@ export default function CategoriesSection() {
         </div>
 
         <Reveal delay={0.08}>
-          <div className="mt-10 overflow-hidden rounded-[28px] border border-carbone/10 bg-white/82 shadow-[0_28px_70px_-48px_rgba(11,13,16,.38)] sm:mt-12 lg:mt-16 lg:rounded-[32px] lg:bg-white/65 lg:backdrop-blur-xl lg:shadow-[0_45px_110px_-58px_rgba(11,13,16,.48)]">
+          <div className="mt-10 overflow-hidden rounded-[28px] border border-carbone/10 bg-white/82 shadow-[0_28px_70px_-48px_rgba(11,13,16,.38)] sm:mt-12 lg:mt-16 lg:rounded-[32px]">
+            {/* MOBILE */}
             <div className="lg:hidden">
-              <div className="grid grid-cols-2 gap-2 border-b border-carbone/10 bg-white/65 p-3 sm:grid-cols-3">
+              <div className="grid grid-cols-2 gap-2 border-b border-carbone/10 bg-white/70 p-3 sm:grid-cols-3">
                 {ordered.map((cat, i) => {
                   const Icon = categoryIconFor(cat);
                   const selected = active === i;
                   return (
                     <button key={cat} type="button" onClick={() => setActive(i)} aria-pressed={selected}
                       className={`relative flex min-h-[76px] min-w-0 flex-col items-start justify-between rounded-[18px] border p-3 text-left transition-colors duration-150 ${selected ? 'border-rosso bg-rosso text-white' : 'border-carbone/10 bg-white text-carbone'}`}>
-                      <div className="flex w-full items-center justify-between gap-2">
-                        <Icon size={15} className={selected ? 'text-white' : 'text-rosso'} />
-                        <span className={`text-[8px] font-bold uppercase tracking-[0.16em] ${selected ? 'text-white/70' : 'text-carbone/35'}`}>{String(i + 1).padStart(2, '0')}</span>
-                      </div>
+                      <div className="flex w-full items-center justify-between gap-2"><Icon size={15} className={selected ? 'text-white' : 'text-rosso'} /><span className={`text-[8px] font-bold uppercase tracking-[0.16em] ${selected ? 'text-white/70' : 'text-carbone/35'}`}>{String(i + 1).padStart(2, '0')}</span></div>
                       <span className="mt-3 line-clamp-2 text-[10px] font-extrabold leading-tight sm:text-[11px]">{cat}</span>
                     </button>
                   );
                 })}
               </div>
 
-              <div className="relative min-h-[520px] overflow-hidden bg-[#12171c] sm:min-h-[570px]">
-                <div className="blueprint pointer-events-none absolute inset-0 opacity-24" />
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_38%,rgba(116,131,143,.28),transparent_38%),linear-gradient(180deg,#222a31_0%,#111419_100%)]" />
-                <span className="absolute right-5 top-4 z-10 font-display text-[5.5rem] font-black leading-none text-white/[0.04]">{String(active + 1).padStart(2, '0')}</span>
-                <span className="absolute left-5 top-5 z-10 flex items-center gap-2 text-[8px] font-bold uppercase tracking-[0.22em] text-white/[0.64]"><span className="h-1.5 w-1.5 rounded-full bg-rosso" />{zone.code}</span>
+              <div className="bg-[#12171c]">
+                <div className="relative h-[340px] overflow-hidden sm:h-[400px]">
+                  <div className="blueprint pointer-events-none absolute inset-0 opacity-24" />
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_48%,rgba(116,131,143,.28),transparent_42%),linear-gradient(180deg,#222a31_0%,#111419_100%)]" />
+                  <span className="absolute right-5 top-4 z-10 font-display text-[5.5rem] font-black leading-none text-white/[0.04]">{String(active + 1).padStart(2, '0')}</span>
+                  <span className="absolute left-5 top-5 z-10 flex items-center gap-2 text-[8px] font-bold uppercase tracking-[0.22em] text-white/[0.64]"><span className="h-1.5 w-1.5 rounded-full bg-rosso" />{zone.code}</span>
 
-                {ordered.map((cat, i) => (
-                  <div
-                    key={cat}
-                    aria-hidden={i !== active}
-                    className={`absolute inset-x-[18%] bottom-[39%] top-[18%] transition-opacity duration-150 sm:inset-x-[20%] sm:bottom-[36%] sm:top-[17%] ${i === active ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
-                  >
-                    <Image src={coverFor(cat)} alt={i === active ? cat : ''} fill sizes="64vw" className="object-contain object-center drop-shadow-[0_20px_18px_rgba(0,0,0,.58)]" />
-                  </div>
-                ))}
+                  {ordered.map((cat, i) => (
+                    <div key={cat} aria-hidden={i !== active} className={`absolute inset-x-[14%] bottom-[10%] top-[17%] transition-opacity duration-150 sm:inset-x-[17%] ${i === active ? 'opacity-100' : 'pointer-events-none opacity-0'}`}>
+                      <Image src={coverFor(cat)} alt={i === active ? cat : ''} fill sizes="72vw" className="object-contain object-center drop-shadow-[0_20px_18px_rgba(0,0,0,.58)]" />
+                    </div>
+                  ))}
+                </div>
 
-                <div className="absolute bottom-0 left-0 right-0 z-20 border-t border-white/12 bg-[#0f1317] p-5 sm:p-6">
+                <div className="border-t border-white/12 bg-[#0f1317] p-5 sm:p-6">
                   <div className="flex items-start justify-between gap-5">
                     <div className="min-w-0">
                       <div className="flex items-center gap-2 text-rosso"><ActiveIcon size={16} /><span className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/[0.54]">{activeCount} {activeCount === 1 ? 'prodotto' : 'prodotti'}</span></div>
@@ -110,20 +105,19 @@ export default function CategoriesSection() {
               </div>
             </div>
 
+            {/* DESKTOP */}
             <div className="hidden min-h-[700px] lg:grid lg:grid-cols-[350px_minmax(0,1fr)]">
-              <div className="relative border-r border-carbone/10 bg-[linear-gradient(180deg,rgba(241,243,244,.92),rgba(215,220,223,.88))] p-5 xl:p-6">
+              <div className="relative border-r border-carbone/10 bg-[linear-gradient(180deg,rgba(241,243,244,.94),rgba(215,220,223,.9))] p-5 xl:p-6">
                 <div className="mb-5 flex items-center justify-between px-3 pt-2"><span className="text-[9px] font-bold uppercase tracking-[0.24em] text-carbone/42">Operating zones</span><span className="text-[9px] font-bold uppercase tracking-[0.2em] text-rosso">Select / enter</span></div>
                 <div className="border-t border-carbone/10">
                   {ordered.map((cat, i) => {
-                    const Icon = categoryIconFor(cat);
-                    const selected = active === i;
-                    const count = countByCategory(cat);
+                    const Icon = categoryIconFor(cat); const selected = active === i; const count = countByCategory(cat);
                     return (
-                      <Link key={cat} href={`/catalogo?categoria=${encodeURIComponent(cat)}`} onMouseEnter={() => setActive(i)} onFocus={() => setActive(i)} className={`group relative grid min-h-[88px] grid-cols-[42px_minmax(0,1fr)_auto] items-center gap-4 border-b border-carbone/10 px-3 transition-all duration-200 ${selected ? 'bg-white/75' : 'hover:bg-white/45'}`}>
+                      <Link key={cat} href={`/catalogo?categoria=${encodeURIComponent(cat)}`} onMouseEnter={() => setActive(i)} onFocus={() => setActive(i)} className={`group relative grid min-h-[88px] grid-cols-[42px_minmax(0,1fr)_auto] items-center gap-4 border-b border-carbone/10 px-3 transition-colors duration-200 ${selected ? 'bg-white/80' : 'hover:bg-white/50'}`}>
                         <span className={`flex h-10 w-10 items-center justify-center rounded-xl border ${selected ? 'border-rosso bg-rosso text-white' : 'border-carbone/10 bg-white/65 text-carbone/58'}`}><Icon size={17} /></span>
                         <span className="min-w-0"><span className={`block text-[8px] font-bold uppercase tracking-[0.2em] ${selected ? 'text-rosso' : 'text-carbone/35'}`}>Zone {String(i + 1).padStart(2, '0')}</span><span className={`mt-1 block truncate font-display text-[1.08rem] font-extrabold ${selected ? 'text-carbone' : 'text-carbone/62'}`}>{cat}</span></span>
                         <span className="text-right"><span className="block font-display text-lg font-extrabold text-carbone/72">{count}</span><span className="block text-[7px] font-bold uppercase tracking-[0.16em] text-carbone/32">prod.</span></span>
-                        <motion.span animate={{ scaleY: selected ? 1 : 0 }} className="absolute bottom-3 left-0 top-3 w-[3px] origin-center bg-rosso" />
+                        {selected && <span className="absolute bottom-3 left-0 top-3 w-[3px] bg-rosso" />}
                       </Link>
                     );
                   })}
@@ -131,26 +125,26 @@ export default function CategoriesSection() {
                 <Link href="/catalogo" className="group mt-5 flex items-center justify-between px-3 py-3 text-sm font-bold text-carbone hover:text-rosso">Tutti i reparti <ArrowRight size={15} /></Link>
               </div>
 
-              <div className="relative overflow-hidden bg-[#101419]">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_56%_38%,rgba(108,124,137,.32),transparent_34%),linear-gradient(135deg,#283139_0%,#151a1f_42%,#0b0e11_100%)]" />
-                <div className="blueprint pointer-events-none absolute inset-0 opacity-30" />
-                <div className="absolute left-8 top-7 z-20 flex items-center gap-3"><span className="h-2 w-2 rounded-full bg-rosso" /><span className="text-[9px] font-bold uppercase tracking-[0.26em] text-white/[0.62]">Arredo Chef / kitchen mapping</span></div>
-                <span className="absolute right-8 top-4 z-10 font-display text-[9rem] font-black leading-none text-white/[0.04] xl:text-[11rem]">{String(active + 1).padStart(2, '0')}</span>
+              <div className="grid grid-rows-[1fr_auto] bg-[#101419]">
+                <div className="relative min-h-[470px] overflow-hidden">
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_56%_48%,rgba(108,124,137,.32),transparent_38%),linear-gradient(135deg,#283139_0%,#151a1f_42%,#0b0e11_100%)]" />
+                  <div className="blueprint pointer-events-none absolute inset-0 opacity-30" />
+                  <div className="absolute left-8 top-7 z-20 flex items-center gap-3"><span className="h-2 w-2 rounded-full bg-rosso" /><span className="text-[9px] font-bold uppercase tracking-[0.26em] text-white/[0.62]">Arredo Chef / kitchen mapping</span></div>
+                  <span className="absolute right-8 top-4 z-10 font-display text-[9rem] font-black leading-none text-white/[0.04] xl:text-[11rem]">{String(active + 1).padStart(2, '0')}</span>
 
-                <AnimatePresence mode="wait">
-                  <motion.div key={activeCategory} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="absolute inset-x-[21%] bottom-[34%] top-[16%] xl:inset-x-[23%] xl:bottom-[32%] xl:top-[17%]">
-                    <Image src={coverFor(activeCategory)} alt={activeCategory} fill sizes="38vw" className="object-contain object-center drop-shadow-[0_30px_26px_rgba(0,0,0,.65)]" />
-                  </motion.div>
-                </AnimatePresence>
-
-                <AnimatePresence mode="wait">
-                  <motion.div key={`${activeCategory}-copy`} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }} transition={{ duration: 0.2 }} className="absolute bottom-0 left-0 right-0 z-20 border-t border-white/12 bg-[#0d1115]/94 p-7 xl:p-8">
-                    <div className="grid grid-cols-[minmax(0,1fr)_260px] items-end gap-8">
-                      <div><div className="flex items-center gap-2.5 text-rosso"><ActiveIcon size={17} /><span className="text-[9px] font-bold uppercase tracking-[0.23em]">{zone.code}</span></div><h3 className="mt-3 font-display text-[clamp(2.4rem,4vw,4.2rem)] font-extrabold leading-[.92] text-white">{activeCategory}</h3><p className="mt-4 max-w-2xl text-[14px] leading-relaxed text-white/[0.65]">{zone.text}</p></div>
-                      <div className="border-l border-white/12 pl-6"><p className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/[0.38]">{zone.title}</p><p className="mt-2 font-display text-3xl font-extrabold text-white">{activeCount}</p><p className="mt-1 text-[10px] uppercase tracking-[0.18em] text-white/[0.42]">prodotti disponibili</p><Link href={`/catalogo?categoria=${encodeURIComponent(activeCategory)}`} className="group mt-5 inline-flex items-center gap-3 text-sm font-bold text-white hover:text-rosso">Apri il reparto <span className="flex h-9 w-9 items-center justify-center rounded-full bg-rosso text-white"><ArrowUpRight size={14} /></span></Link></div>
+                  {ordered.map((cat, i) => (
+                    <div key={cat} aria-hidden={i !== active} className={`absolute inset-x-[16%] bottom-[8%] top-[13%] transition-opacity duration-150 xl:inset-x-[19%] ${i === active ? 'opacity-100' : 'pointer-events-none opacity-0'}`}>
+                      <Image src={coverFor(cat)} alt={i === active ? cat : ''} fill sizes="46vw" className="object-contain object-center drop-shadow-[0_30px_26px_rgba(0,0,0,.65)]" />
                     </div>
-                  </motion.div>
-                </AnimatePresence>
+                  ))}
+                </div>
+
+                <div className="border-t border-white/12 bg-[#0d1115] p-7 xl:p-8">
+                  <div className="grid grid-cols-[minmax(0,1fr)_260px] items-end gap-8">
+                    <div><div className="flex items-center gap-2.5 text-rosso"><ActiveIcon size={17} /><span className="text-[9px] font-bold uppercase tracking-[0.23em]">{zone.code}</span></div><h3 className="mt-3 font-display text-[clamp(2.4rem,4vw,4.2rem)] font-extrabold leading-[.92] text-white">{activeCategory}</h3><p className="mt-4 max-w-2xl text-[14px] leading-relaxed text-white/[0.65]">{zone.text}</p></div>
+                    <div className="border-l border-white/12 pl-6"><p className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/[0.38]">{zone.title}</p><p className="mt-2 font-display text-3xl font-extrabold text-white">{activeCount}</p><p className="mt-1 text-[10px] uppercase tracking-[0.18em] text-white/[0.42]">prodotti disponibili</p><Link href={`/catalogo?categoria=${encodeURIComponent(activeCategory)}`} className="group mt-5 inline-flex items-center gap-3 text-sm font-bold text-white hover:text-rosso">Apri il reparto <span className="flex h-9 w-9 items-center justify-center rounded-full bg-rosso text-white"><ArrowUpRight size={14} /></span></Link></div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
