@@ -75,13 +75,13 @@ export default function ProductPage({ params }: Props) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
 
-      <article className="relative overflow-hidden bg-[#e7e9ea] pb-20 pt-[178px] sm:pt-[190px] md:pb-28 md:pt-[176px] lg:pt-[148px]">
+      <article className="relative overflow-hidden bg-[#e7e9ea] pb-20 pt-[220px] sm:pt-[210px] md:pb-28 md:pt-[188px] lg:pt-[152px]">
         <div className="blueprint-light pointer-events-none absolute inset-0 opacity-50" />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-[520px] bg-gradient-to-b from-[#cdd2d5]/70 via-transparent to-transparent" />
         <div className="pointer-events-none absolute right-[-10rem] top-32 h-[32rem] w-[32rem] rounded-full bg-white/70 blur-[150px]" />
 
         <div className="container-ac relative">
-          <nav className="mb-6 flex flex-wrap items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-carbone/55 sm:mb-8 sm:text-[11px]">
+          <nav className="relative z-10 mb-6 flex flex-wrap items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-carbone/55 sm:mb-8 sm:text-[11px]">
             <Link href="/catalogo" className="transition-colors hover:text-rosso">Catalogo</Link>
             <span className="text-carbone/25">/</span>
             <Link href={`/catalogo?categoria=${encodeURIComponent(product.category)}`} className="transition-colors hover:text-rosso">{product.category}</Link>
