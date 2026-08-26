@@ -5,7 +5,9 @@ import { notFound } from 'next/navigation';
 import { ArrowLeft, ArrowRight, Check, Mail, Phone, Truck, Wrench } from 'lucide-react';
 import { getProduct, products, relatedProducts } from '@/data/products';
 import { company } from '@/data/company';
+import { commercialModeBadge, essentialSpecs, getCatalogProduct } from '@/lib/catalog';
 import ProductCard from '@/components/ProductCard';
+import AddToProjectButton from '@/components/project/AddToProjectButton';
 import Reveal from '@/components/Reveal';
 
 type Props = { params: { slug: string } };
@@ -39,6 +41,8 @@ export default function ProductPage({ params }: Props) {
   const product = getProduct(params.slug);
   if (!product) notFound();
 
+  const cp = getCatalogProduct(product.slug);
+  const specs = cp ? essentialSpecs(cp, 6) : [];
   const related = relatedProducts(product.slug, 4);
 
   const subject = encodeURIComponent(`Richiesta informazioni — ${product.name}`);
@@ -46,6 +50,9 @@ export default function ProductPage({ params }: Props) {
     `Buongiorno,\n\nvorrei ricevere informazioni e un preventivo per:\n${product.name}\n\nTipo di locale: \nCittà: \nNuovo o usato: \n\nGrazie.`
   );
 
+  // JSON-LD onesto: nessun prezzo, nessuna disponibilità, nessun brand
+  // se il dato non è realmente noto. Offer verrà aggiunta solo quando
+  // esisterà un prezzo reale.
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -53,15 +60,33 @@ export default function ProductPage({ params }: Props) {
     description: product.description,
     image: product.image,
     category: product.category,
-    brand: { '@type': 'Brand', name: 'Arredo Chef' },
-    offers: {
-      '@type': 'Offer',
-      availability: 'https://schema.org/InStock',
-      priceCurrency: 'EUR',
-      price: '0',
-      seller: { '@type': 'Organization', name: company.legalName },
-      description: 'Prezzo su preventivo personalizzato',
-    },
+    ...(cp?.identity.brand ? { brand: { '@type': 'Brand', name: cp.identity.brand } } : {}),
+    ...(cp?.identity.model ? { model: cp.identity.model } : {}),
+  };
+
+  const breadcrumbLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Catalogo',
+        item: 'https://www.arredochefsrls.it/catalogo',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: product.category,
+        item: `https://www.arredochefsrls.it/catalogo?categoria=${encodeURIComponent(product.category)}`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: product.name,
+        item: `https://www.arredochefsrls.it/catalogo/${product.slug}`,
+      },
+    ],
   };
 
   return (
@@ -69,6 +94,10 @@ export default function ProductPage({ params }: Props) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
       />
 
       <article
@@ -116,14 +145,43 @@ export default function ProductPage({ params }: Props) {
               </div>
             </Reveal>
 
-            {/* Dettagli */}
+            {/* Dettagli — Machine Cockpit */}
             <div className="lg:pt-4">
               <Reveal delay={0.1}>
-                <h1 className="h-display text-[clamp(1.9rem,4.2vw,3.1rem)] text-carbone">
+                {cp && (
+                  <span className="eyebrow text-rosso">
+                    {commercialModeBadge[cp.commercial.mode]}
+                    {cp.identity.model ? ` · Mod. ${cp.identity.model}` : ''}
+                  </span>
+                )}
+                <h1 className="h-display mt-4 text-[clamp(1.9rem,4.2vw,3.1rem)] text-carbone">
                   {product.name}
                 </h1>
 
-                <div className="mt-6 hairline-oro" />
+                {/* Red Line */}
+                <div className="mt-6 h-px w-full bg-gradient-to-r from-rosso/60 via-rosso/25 to-transparent" />
+
+                {/* Specifiche essenziali dichiarate — solo dati reali */}
+                {specs.length > 0 && (
+                  <div className="surface-light mt-6 rounded-2xl border border-carbone/10 p-5">
+                    <p className="eyebrow mb-4 text-rosso">Specifiche tecniche</p>
+                    <dl className="grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-3">
+                      {specs.map((s) => (
+                        <div
+                          key={s.label}
+                          className="border-l border-carbone/10 pl-3 transition-colors duration-300 hover:border-rosso/50"
+                        >
+                          <dt className="text-[10px] font-bold uppercase tracking-widest text-carbone/45">
+                            {s.label}
+                          </dt>
+                          <dd className="mt-1 text-[13px] font-semibold tabular-nums text-carbone">
+                            {s.value}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </div>
+                )}
 
                 <div className="mt-6 space-y-4 text-pretty text-[15px] leading-relaxed text-carbone/65">
                   {product.description
@@ -145,7 +203,7 @@ export default function ProductPage({ params }: Props) {
 
               {/* Prezzo su misura */}
               <Reveal delay={0.18}>
-                <div className="mt-10 rounded-2xl border border-rosso/20 bg-rosso/[0.05] p-6">
+                <div className="mt-10 rounded-2xl border border-rosso/20 bg-gradient-to-br from-rosso/[0.08] to-rosso/[0.02] p-6 shadow-lift-sm">
                   <p className="text-[10px] font-bold uppercase tracking-widest2 text-rosso">
                     Prezzo su preventivo
                   </p>
@@ -167,6 +225,11 @@ export default function ProductPage({ params }: Props) {
                       <Mail size={15} />
                       Richiedi per email
                     </a>
+                    <AddToProjectButton
+                      slug={product.slug}
+                      name={product.name}
+                      variant="cockpit"
+                    />
                   </div>
                 </div>
               </Reveal>

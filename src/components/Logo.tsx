@@ -2,23 +2,24 @@ import Image from 'next/image';
 
 /**
  * Marchio Arredo Chef.
- * Usa il logo ufficiale completo (icona + wordmark) in formato WebP.
+ * Esiste un solo asset ufficiale: il logo completo (icona + wordmark) in WebP.
+ * NOTA: non esiste ancora un asset "solo icona"; quando sarà disponibile,
+ * reintrodurre una prop dedicata con un secondo file reale.
+ * `tone` è accettato per compatibilità con i chiamanti (Navbar) ma l'asset
+ * attuale è unico e leggibile su entrambi i fondi.
  */
 export default function Logo({
   size = 46,
-  tone = 'dark',
-  withWordmark = true,
+  tone: _tone = 'dark',
   className = '',
 }: {
   size?: number;
-  /** 'dark' = testo chiaro (fondo scuro) · 'light' = testo scuro (fondo chiaro) */
+  /** 'dark' = fondo scuro · 'light' = fondo chiaro (riservato per asset futuri) */
   tone?: 'dark' | 'light';
-  withWordmark?: boolean;
   className?: string;
 }) {
-  // Con wordmark: logo completo quadrato; senza: solo icona
-  const src = withWordmark ? '/images/logo-mark.webp' : '/images/logo-mark.webp';
-  const w = withWordmark ? size * 2.6 : size;
+  const src = '/images/logo-mark.webp';
+  const w = size * 2.6;
   const h = size;
 
   return (

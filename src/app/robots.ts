@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/api/', '/privacy', '/cookie'],
+      disallow: ['/api/', '/privacy', '/cookie', '/progetto'],
     },
     sitemap: 'https://www.arredochefsrls.it/sitemap.xml',
   };

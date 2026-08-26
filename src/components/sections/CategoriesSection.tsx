@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { categories, products, countByCategory } from '@/data/products';
+import { categoryIconFor } from '@/lib/catalog';
 import Reveal from '@/components/Reveal';
 
 /** Immagine rappresentativa del reparto */
@@ -61,6 +62,7 @@ export default function CategoriesSection() {
         <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 sm:gap-4">
           {ordered.map((cat, i) => {
             const count = countByCategory(cat);
+            const CategoryIcon = categoryIconFor(cat);
             return (
               <Reveal key={cat} delay={Math.min(i * 0.06, 0.3)}>
                 <Link
@@ -68,7 +70,7 @@ export default function CategoriesSection() {
                   className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-carbone/15 bg-white shadow-lift-sm transition-all duration-500 ease-smooth hover:-translate-y-1 hover:border-rosso/25 hover:shadow-lift"
                 >
                   {/* Immagine */}
-                  <div className="relative aspect-[16/10] overflow-hidden bg-sabbia/40">
+                  <div className="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-avorio via-sabbia to-cemento/60">
                     <Image
                       src={coverFor(cat)}
                       alt={cat}
@@ -83,13 +85,16 @@ export default function CategoriesSection() {
 
                   {/* Footer card */}
                   <div className="flex flex-1 items-center justify-between px-4 py-3.5 sm:px-5 sm:py-4">
-                    <div>
-                      <h3 className="font-display text-[14px] font-bold leading-tight tracking-tight text-carbone sm:text-[15px]">
-                        {cat}
-                      </h3>
-                      <p className="mt-1 text-xs text-carbone/60">
-                        {count} {count === 1 ? 'prodotto' : 'prodotti'}
-                      </p>
+                    <div className="flex items-center gap-2">
+                      <CategoryIcon size={18} className="shrink-0 text-rosso" />
+                      <div>
+                        <h3 className="font-display text-[14px] font-bold leading-tight tracking-tight text-carbone sm:text-[15px]">
+                          {cat}
+                        </h3>
+                        <p className="mt-1 text-xs text-carbone/60">
+                          {count} {count === 1 ? 'prodotto' : 'prodotti'}
+                        </p>
+                      </div>
                     </div>
                     <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-carbone/[0.06] text-carbone/70 transition-all duration-300 group-hover:bg-rosso group-hover:text-white">
                       <ArrowUpRight size={14} strokeWidth={2.5} />

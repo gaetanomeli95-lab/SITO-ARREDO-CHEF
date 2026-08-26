@@ -8,6 +8,7 @@ import { ArrowRight, Menu, Phone, X } from 'lucide-react';
 import { company, navLinks } from '@/data/company';
 import { useNavTheme } from '@/hooks/useNavTheme';
 import Logo from '@/components/Logo';
+import ProjectIndicator from '@/components/project/ProjectIndicator';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -87,6 +88,7 @@ export default function Navbar() {
 
           {/* Azioni desktop */}
           <div className="hidden items-center gap-3 lg:flex">
+            <ProjectIndicator tone={tone} />
             <a
               href={`tel:${company.phones.marketing.tel}`}
               className={`group hidden items-center gap-2.5 rounded-full border py-2 pl-2 pr-5 transition-all duration-300 ease-smooth xl:flex ${
@@ -120,15 +122,18 @@ export default function Navbar() {
           </div>
 
           {/* Menu mobile */}
-          <button
-            onClick={() => setOpen(true)}
-            aria-label="Apri menu"
-            className={`relative z-10 flex h-11 w-11 items-center justify-center rounded-full border transition-colors lg:hidden ${
-              isDark ? 'border-white/18 text-avorio' : 'border-carbone/15 text-carbone'
-            }`}
-          >
-            <Menu size={19} />
-          </button>
+          <div className="flex items-center gap-2 lg:hidden">
+            <ProjectIndicator tone={tone} />
+            <button
+              onClick={() => setOpen(true)}
+              aria-label="Apri menu"
+              className={`relative z-10 flex h-11 w-11 items-center justify-center rounded-full border transition-colors ${
+                isDark ? 'border-white/18 text-avorio' : 'border-carbone/15 text-carbone'
+              }`}
+            >
+              <Menu size={19} />
+            </button>
+          </div>
         </nav>
 
         {/* Indicatore di avanzamento lettura */}

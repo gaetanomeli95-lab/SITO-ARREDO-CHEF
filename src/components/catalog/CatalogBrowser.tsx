@@ -5,6 +5,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Search, SlidersHorizontal, X } from 'lucide-react';
 import { categories, products } from '@/data/products';
+import { categoryIconFor } from '@/lib/catalog';
+import { track } from '@/lib/analytics';
 import ProductCard from '@/components/ProductCard';
 
 const ALL = 'Tutti i reparti';
@@ -33,7 +35,16 @@ export default function CatalogBrowser() {
     if (active !== ALL) params.set('categoria', active);
     const qs = params.toString();
     router.replace(qs ? `/catalogo?${qs}` : '/catalogo', { scroll: false });
+    if (active !== ALL) track('product_filter', { category: active });
   }, [active, router]);
+
+  // Traccia la ricerca con debounce, senza rumore per ogni tasto
+  useEffect(() => {
+    const q = query.trim();
+    if (q.length < 3) return;
+    const t = window.setTimeout(() => track('product_search', { query: q }), 800);
+    return () => window.clearTimeout(t);
+  }, [query]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -106,16 +117,19 @@ export default function CatalogBrowser() {
                 const isActive = t === active;
                 const count =
                   t === ALL ? products.length : products.filter((p) => p.category === t).length;
+                const CategoryIcon = categoryIconFor(t);
+
                 return (
                   <button
                     key={t}
                     onClick={() => setActive(t)}
-                    className={`relative shrink-0 rounded-full border px-4 py-2.5 text-[13px] font-medium transition-all duration-300 ${
+                    className={`relative inline-flex shrink-0 items-center gap-1.5 rounded-full border px-4 py-2.5 text-[13px] font-medium transition-all duration-300 ${
                       isActive
                         ? 'border-rosso bg-rosso text-white shadow-lift-sm'
                         : 'border-carbone/15 bg-white/60 text-carbone/70 hover:border-rosso/30 hover:text-carbone'
                     }`}
                   >
+                    <CategoryIcon size={14} className={isActive ? 'text-white' : 'text-carbone/60'} />
                     <span className="relative">
                       {t}
                       <span className={isActive ? 'ml-1.5 text-white/70' : 'ml-1.5 text-carbone/35'}>

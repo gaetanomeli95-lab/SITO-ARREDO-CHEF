@@ -4,9 +4,20 @@ import { useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Compass, FileText, LucideIcon, MessageCircle, Truck } from 'lucide-react';
 import { process } from '@/data/company';
 import Reveal from '@/components/Reveal';
+
+const stepIcons: Record<string, LucideIcon> = {
+  '01': MessageCircle,
+  '02': Compass,
+  '03': FileText,
+  '04': Truck,
+};
+
+function stepIconFor(n: string): LucideIcon {
+  return stepIcons[n] ?? MessageCircle;
+}
 
 export default function ProcessSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -79,14 +90,19 @@ export default function ProcessSection() {
           </div>
 
           <div className="grid gap-8 lg:grid-cols-4 lg:gap-8">
-            {process.map((step, i) => (
-              <Reveal key={step.n} delay={i * 0.1}>
-                <div className="group relative">
-                  <div className="mb-5 flex items-center lg:mb-7 lg:block">
-                    <span className="relative z-10 flex h-[76px] w-[76px] items-center justify-center rounded-full border border-white/12 bg-grafite font-display text-xl font-extrabold text-avorio transition-all duration-500 ease-smooth group-hover:border-transparent group-hover:bg-rosso group-hover:text-white">
-                      {step.n}
-                    </span>
-                  </div>
+            {process.map((step, i) => {
+              const StepIcon = stepIconFor(step.n);
+              return (
+                <Reveal key={step.n} delay={i * 0.1}>
+                  <div className="group relative">
+                    <div className="mb-5 flex items-center lg:mb-7 lg:block">
+                      <span className="relative z-10 flex h-[76px] w-[76px] items-center justify-center rounded-full border border-white/12 bg-grafite text-avorio transition-all duration-500 ease-smooth group-hover:border-transparent group-hover:bg-rosso group-hover:text-white">
+                        <StepIcon size={28} strokeWidth={1.5} />
+                        <span className="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full bg-rosso font-display text-[10px] font-bold text-white">
+                          {step.n}
+                        </span>
+                      </span>
+                    </div>
 
                   <h3 className="font-display text-xl font-bold tracking-tight text-avorio">
                     {step.title}
@@ -94,9 +110,10 @@ export default function ProcessSection() {
                   <p className="mt-2.5 text-pretty text-[14px] leading-relaxed text-cenere/85 lg:text-[15px] lg:leading-relaxed">
                     {step.text}
                   </p>
-                </div>
-              </Reveal>
-            ))}
+                  </div>
+                </Reveal>
+              );
+            })}
           </div>
         </div>
       </div>

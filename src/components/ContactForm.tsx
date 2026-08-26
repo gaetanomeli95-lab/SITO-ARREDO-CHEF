@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { AlertCircle, CheckCircle2, Loader2, Send } from 'lucide-react';
 import { company } from '@/data/company';
+import { track } from '@/lib/analytics';
 
 type Status = 'idle' | 'sending' | 'sent' | 'error' | 'fallback';
 
@@ -23,7 +24,15 @@ const inputBase =
 
 const labelBase = 'mb-2 block text-[11px] font-bold uppercase tracking-widest text-carbone/70';
 
-export default function ContactForm() {
+export default function ContactForm({
+  initialMessage = '',
+  quoteContext,
+}: {
+  /** Messaggio precompilato (es. riepilogo del progetto). */
+  initialMessage?: string;
+  /** Se presente, l'invio viene tracciato come richiesta preventivo. */
+  quoteContext?: string;
+} = {}) {
   const [status, setStatus] = useState<Status>('idle');
   const [error, setError] = useState('');
   const [form, setForm] = useState({
@@ -32,7 +41,7 @@ export default function ContactForm() {
     telefono: '',
     attivita: '',
     citta: '',
-    messaggio: '',
+    messaggio: initialMessage,
     privacy: false,
     website: '',
   });
@@ -61,6 +70,7 @@ export default function ContactForm() {
 
       if (res.ok && json.ok) {
         setStatus('sent');
+        if (quoteContext) track('quote_submitted', { context: quoteContext });
         return;
       }
 
