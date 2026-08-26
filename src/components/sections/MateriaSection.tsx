@@ -18,16 +18,16 @@ export default function MateriaSection() {
   const stats = [
     { value: `${products.length}+`, label: 'Prodotti a catalogo' },
     { value: String(categories.length), label: 'Reparti coperti' },
-    { value: String(company.reviews.count), label: 'Recensioni su Google' },
-    { value: '1', label: 'Interlocutore, dall’inizio alla fine' },
+    { value: String(company.reviews.count), label: 'Recensioni Google' },
+    { value: '1', label: 'Referente unico' },
   ];
 
   return (
     <section data-nav-theme="dark" className="relative overflow-hidden bg-[#0b0d10] py-16 text-avorio sm:py-20 md:py-28 lg:py-36">
       <div className="pointer-events-none absolute inset-0">
-        <Image src="/images/hero-4.webp" alt="" fill sizes="100vw" className="object-cover opacity-28 saturate-0" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0b0d10] via-[#0b0d10]/92 to-[#0b0d10]/58" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0b0d10] via-transparent to-[#0b0d10]/55" />
+        <Image src="/images/hero-4.webp" alt="" fill sizes="100vw" className="object-cover opacity-24 saturate-0" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0b0d10] via-[#0b0d10]/94 to-[#0b0d10]/70" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0b0d10] via-transparent to-[#0b0d10]/70" />
       </div>
       <div className="grain pointer-events-none absolute inset-0 opacity-45" />
       <div className="pointer-events-none absolute bottom-[-10rem] right-[-8rem] h-[30rem] w-[30rem] rounded-full bg-rosso/[0.08] blur-[150px]" />
@@ -40,65 +40,56 @@ export default function MateriaSection() {
               <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-rosso">Arredo Chef · Service architecture</span>
             </div>
             <h2 className="h-display mt-6 max-w-4xl text-[clamp(2.55rem,9vw,4rem)] text-avorio sm:mt-7 sm:text-[clamp(2.8rem,5.6vw,5rem)]">
-              Quattro competenze.
+              Non quattro servizi.
               <br />
-              <span className="text-steel">Un solo sistema.</span>
+              <span className="text-steel">Una catena che non si spezza.</span>
             </h2>
           </Reveal>
 
           <Reveal delay={0.1}>
             <p className="border-l border-rosso/60 pl-5 text-pretty text-[13px] leading-relaxed text-white/[0.72] sm:pl-6 sm:text-sm md:text-base">
-              Progettazione, rilievi, installazione e assistenza non sono servizi separati. Sono quattro stazioni dello stesso percorso operativo.
+              La qualità non sta solo nella macchina. Sta nel fatto che rilievo, progetto, montaggio e assistenza parlino tra loro senza perdere informazioni.
             </p>
           </Reveal>
         </div>
 
-        <Reveal delay={0.08}>
-          <div className="relative mt-10 overflow-hidden rounded-[28px] border border-white/12 bg-[#101419]/82 shadow-[0_45px_120px_-58px_rgba(0,0,0,.95)] backdrop-blur-xl sm:mt-12 lg:mt-16">
-            <span className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-rosso/70 to-transparent" />
+        <div className="relative mt-12 sm:mt-14 lg:mt-16">
+          <div className="absolute bottom-0 left-5 top-0 w-px bg-white/10 lg:left-1/2 lg:-translate-x-1/2" />
+          {services.map((service, i) => {
+            const Icon = iconMap[service.icon] ?? Compass;
+            const reverse = i % 2 === 1;
+            return (
+              <Reveal key={service.title} delay={Math.min(i * 0.08, 0.24)}>
+                <div className="relative grid gap-6 py-8 pl-14 sm:py-10 lg:grid-cols-2 lg:gap-16 lg:pl-0 lg:py-14">
+                  <span className="absolute left-5 top-10 z-10 flex h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full border border-white/15 bg-[#171c22] text-rosso shadow-[0_0_0_8px_rgba(11,13,16,.85)] lg:left-1/2 lg:top-1/2 lg:-translate-y-1/2">
+                    <Icon size={18} strokeWidth={1.6} />
+                  </span>
 
-            <div className="relative grid lg:grid-cols-4">
-              <div className="pointer-events-none absolute left-[12.5%] right-[12.5%] top-[84px] hidden h-px bg-white/10 lg:block" />
-              <div className="pointer-events-none absolute left-[12.5%] top-[84px] hidden h-px w-[75%] bg-gradient-to-r from-rosso via-white/35 to-rosso/70 lg:block" />
-
-              {services.map((service, i) => {
-                const Icon = iconMap[service.icon] ?? Compass;
-                return (
-                  <div
-                    key={service.title}
-                    className={`relative min-h-[260px] p-6 sm:p-8 lg:min-h-[390px] lg:p-7 xl:p-8 ${i > 0 ? 'border-t border-white/10 lg:border-l lg:border-t-0' : ''}`}
-                  >
-                    <div className="relative z-10 flex items-center justify-between gap-4">
-                      <span className="flex h-14 w-14 items-center justify-center rounded-full border border-white/14 bg-[#171c22] text-white shadow-[0_16px_40px_-24px_rgba(0,0,0,.95)]">
-                        <Icon size={22} strokeWidth={1.5} />
-                      </span>
-                      <span className="font-display text-[3.4rem] font-black leading-none text-white/[0.045]">0{i + 1}</span>
-                    </div>
-
-                    <div className="relative mt-9 lg:mt-16">
-                      <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-rosso">Node 0{i + 1}</p>
-                      <h3 className="mt-3 max-w-[250px] font-display text-[1.4rem] font-extrabold leading-tight tracking-tight text-white">{service.title}</h3>
-                      <p className="mt-4 max-w-[280px] text-[13px] leading-relaxed text-white/[0.66]">{service.text}</p>
-                    </div>
-
-                    <div className="absolute bottom-6 left-6 right-6 hidden items-center gap-3 lg:flex xl:left-8 xl:right-8">
-                      <span className="h-1.5 w-1.5 rounded-full bg-rosso shadow-[0_0_9px_rgba(216,35,42,.8)]" />
-                      <span className="text-[8px] font-bold uppercase tracking-[0.22em] text-white/[0.32]">Connected service node</span>
-                    </div>
+                  <div className={reverse ? 'lg:col-start-2' : 'lg:text-right'}>
+                    <p className="text-[9px] font-bold uppercase tracking-[0.24em] text-rosso">0{i + 1} / Connected layer</p>
+                    <h3 className="mt-3 font-display text-[clamp(1.7rem,3vw,2.5rem)] font-extrabold leading-tight text-white">{service.title}</h3>
                   </div>
-                );
-              })}
-            </div>
 
-            <div className="border-t border-white/10 bg-black/20 p-5 sm:p-6 lg:p-7">
-              <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[20px] bg-white/10 sm:grid-cols-4">
-                {stats.map((stat) => (
-                  <div key={stat.label} className="bg-[#101419] p-5 sm:p-6">
-                    <div className="h-display text-[clamp(2rem,3.4vw,3rem)] text-white">{stat.value}</div>
-                    <div className="mt-2 max-w-[170px] text-[9px] font-semibold uppercase leading-relaxed tracking-[0.18em] text-white/[0.48]">{stat.label}</div>
+                  <div className={`${reverse ? 'lg:col-start-1 lg:row-start-1 lg:text-right' : 'lg:col-start-2'} max-w-xl`}>
+                    <p className="text-[14px] leading-relaxed text-white/[0.68] sm:text-[15px]">{service.text}</p>
                   </div>
-                ))}
-              </div>
+
+                  {i < services.length - 1 && <div className="absolute bottom-0 left-14 right-0 h-px bg-gradient-to-r from-white/10 to-transparent lg:left-[12%] lg:right-[12%]" />}
+                </div>
+              </Reveal>
+            );
+          })}
+        </div>
+
+        <Reveal delay={0.12}>
+          <div className="mt-8 border-y border-white/10 py-6 sm:mt-10 sm:py-8">
+            <div className="grid grid-cols-2 gap-y-6 sm:grid-cols-4">
+              {stats.map((stat, i) => (
+                <div key={stat.label} className={`px-2 sm:px-5 ${i > 0 ? 'sm:border-l sm:border-white/10' : ''}`}>
+                  <div className="h-display text-[clamp(2rem,4vw,3.3rem)] text-white">{stat.value}</div>
+                  <div className="mt-2 max-w-[180px] text-[9px] font-semibold uppercase leading-relaxed tracking-[0.18em] text-white/[0.48]">{stat.label}</div>
+                </div>
+              ))}
             </div>
           </div>
         </Reveal>
