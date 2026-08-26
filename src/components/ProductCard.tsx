@@ -31,42 +31,41 @@ export default function ProductCard({
   return (
     <article
       data-product-index={index}
-      className={`group relative flex h-full min-h-[410px] flex-col overflow-hidden rounded-[24px] border transition-all duration-500 ease-smooth hover:-translate-y-1 ${
+      className={`group relative flex h-full min-h-[430px] flex-col overflow-hidden rounded-[24px] border transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-0.5 ${
         light
-          ? 'border-carbone/10 bg-white shadow-[0_28px_65px_-42px_rgba(11,13,16,.38)] hover:border-rosso/30 hover:shadow-[0_38px_85px_-45px_rgba(11,13,16,.5)]'
-          : 'border-white/[0.10] bg-[#101419] shadow-[0_28px_80px_-44px_rgba(0,0,0,.95)] hover:border-rosso/40'
+          ? 'border-carbone/10 bg-white shadow-[0_20px_48px_-34px_rgba(11,13,16,.30)] hover:border-rosso/28 hover:shadow-[0_28px_60px_-36px_rgba(11,13,16,.4)]'
+          : 'border-white/[0.10] bg-[#101419] shadow-[0_24px_60px_-38px_rgba(0,0,0,.85)] hover:border-rosso/35'
       }`}
     >
       <Link
         href={`/catalogo/${product.slug}`}
         aria-label={`Apri la scheda di ${product.name}`}
-        className={`relative block aspect-[4/3] w-full overflow-hidden ${
+        className={`relative block h-[315px] w-full overflow-hidden sm:h-[290px] md:h-[270px] lg:h-[250px] xl:h-[270px] ${
           light
             ? 'bg-[linear-gradient(145deg,#fbfbfb_0%,#eef1f2_55%,#d9dee1_100%)]'
             : 'bg-[linear-gradient(145deg,#202831_0%,#151a20_55%,#0d1014_100%)]'
         }`}
       >
-        <div className={`${light ? 'blueprint-light opacity-42' : 'blueprint opacity-35'} pointer-events-none absolute inset-0`} />
-        <div className={`pointer-events-none absolute inset-x-[22%] bottom-[11%] h-7 rounded-full blur-xl transition-colors ${light ? 'bg-carbone/10 group-hover:bg-rosso/[0.12]' : 'bg-black/55 group-hover:bg-rosso/[0.16]'}`} />
+        <div className={`${light ? 'blueprint-light opacity-36' : 'blueprint opacity-30'} pointer-events-none absolute inset-0`} />
 
-        <div className="absolute inset-[13%_10%_12%] sm:inset-[12%_11%_11%]">
+        <div className="absolute inset-x-[8%] bottom-[10%] top-[16%] sm:inset-x-[9%] sm:bottom-[9%] sm:top-[15%] md:inset-x-[8%] lg:inset-x-[7%]">
           <Image
             src={product.image}
             alt={product.name}
             fill
             priority={priority}
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-            className={`object-contain object-center transition-transform duration-700 ease-smooth group-hover:scale-[1.035] ${
+            sizes="(max-width: 640px) 84vw, (max-width: 1024px) 45vw, 23vw"
+            className={`object-contain object-center ${
               light
-                ? 'drop-shadow-[0_26px_22px_rgba(11,13,16,.22)]'
-                : 'drop-shadow-[0_30px_26px_rgba(0,0,0,.62)]'
+                ? 'drop-shadow-[0_18px_16px_rgba(11,13,16,.18)]'
+                : 'drop-shadow-[0_22px_20px_rgba(0,0,0,.52)]'
             }`}
           />
         </div>
 
         <div className="absolute inset-x-4 top-4 z-10 flex items-start justify-between gap-3 sm:inset-x-5 sm:top-5">
-          <span className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[8px] font-bold uppercase tracking-[0.18em] backdrop-blur-md ${
-            light ? 'border-carbone/10 bg-white/78 text-carbone/55' : 'border-white/12 bg-black/28 text-white/[0.58]'
+          <span className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[8px] font-bold uppercase tracking-[0.18em] ${
+            light ? 'border-carbone/10 bg-white/92 text-carbone/55' : 'border-white/12 bg-[#0b0d10]/88 text-white/[0.58]'
           }`}>
             <Radio size={9} className="text-rosso" /> Arredo Chef
           </span>
@@ -80,7 +79,7 @@ export default function ProductCard({
             {shortCategory(product.category)}
           </span>
           {modeBadge && (
-            <span className="rounded-full border border-rosso/25 bg-rosso/[0.08] px-2.5 py-1 text-[8px] font-bold uppercase tracking-[0.16em] text-rosso backdrop-blur-md">
+            <span className="rounded-full border border-rosso/25 bg-white/88 px-2.5 py-1 text-[8px] font-bold uppercase tracking-[0.16em] text-rosso">
               {modeBadge}
             </span>
           )}
@@ -96,7 +95,7 @@ export default function ProductCard({
         </div>
 
         <Link href={`/catalogo/${product.slug}`} className="mt-3 block outline-none focus-visible:text-rosso">
-          <h3 className={`font-display text-[1.2rem] font-extrabold leading-[1.04] tracking-tight transition-colors duration-300 group-hover:text-rosso sm:text-[1.3rem] ${light ? 'text-carbone' : 'text-white'}`}>
+          <h3 className={`font-display text-[1.2rem] font-extrabold leading-[1.04] tracking-tight transition-colors duration-200 group-hover:text-rosso sm:text-[1.3rem] ${light ? 'text-carbone' : 'text-white'}`}>
             {product.name}
           </h3>
         </Link>
@@ -124,20 +123,20 @@ export default function ProductCard({
         <div className={`mt-auto flex items-center gap-3 border-t pt-5 ${light ? 'border-carbone/10' : 'border-white/10'}`}>
           <Link
             href={`/catalogo/${product.slug}`}
-            className={`group/link flex min-h-11 flex-1 items-center justify-between rounded-full border px-4 text-[11px] font-bold transition-all ${
+            className={`group/link flex min-h-11 flex-1 items-center justify-between rounded-full border px-4 text-[11px] font-bold transition-colors duration-200 ${
               light
                 ? 'border-carbone/12 bg-carbone text-white hover:border-rosso hover:bg-rosso'
                 : 'border-white/14 bg-white/[0.06] text-white hover:border-rosso hover:bg-rosso'
             }`}
           >
             Scheda completa
-            <ArrowUpRight size={14} className="transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />
+            <ArrowUpRight size={14} />
           </Link>
           <AddToProjectButton slug={product.slug} name={product.name} variant="card" tone={light ? 'light' : 'dark'} />
         </div>
       </div>
 
-      <span className="pointer-events-none absolute left-0 top-0 h-[3px] w-[30%] bg-gradient-to-r from-rosso to-transparent transition-all duration-500 group-hover:w-[62%]" />
+      <span className="pointer-events-none absolute left-0 top-0 h-[3px] w-[30%] bg-gradient-to-r from-rosso to-transparent transition-all duration-300 group-hover:w-[62%]" />
     </article>
   );
 }
