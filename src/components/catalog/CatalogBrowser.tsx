@@ -70,11 +70,11 @@ export default function CatalogBrowser() {
   const tabs = [ALL, ...categories];
 
   return (
-    <section data-nav-theme="light" className="relative bg-[#eef0f1] pb-20 pt-6 text-carbone sm:pt-8 md:pb-28 md:pt-10">
+    <section data-nav-theme="light" className="relative bg-[#eef0f1] pb-20 pt-5 text-carbone sm:pt-7 md:pb-28 md:pt-10">
       <div className="blueprint-light pointer-events-none absolute inset-0 opacity-35" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-44 bg-gradient-to-b from-[#d7dbde]/75 to-transparent" />
       <div className="container-ac relative">
-        <div className="sticky top-[86px] z-30 -mx-2 mb-7 overflow-hidden rounded-[18px] border border-white/10 bg-[#11151a]/[0.96] px-2.5 py-2.5 text-white shadow-[0_20px_55px_-32px_rgba(0,0,0,.78)] backdrop-blur-2xl sm:top-[96px] sm:-mx-3 sm:mb-9 sm:rounded-[22px] sm:px-4 sm:py-3.5 lg:top-[86px] lg:-mx-4 lg:px-5 lg:py-4">
+        <div className="relative z-20 -mx-2 mb-6 overflow-hidden rounded-[18px] border border-white/10 bg-[#11151a]/[0.96] px-2.5 py-2.5 text-white shadow-[0_20px_55px_-32px_rgba(0,0,0,.68)] backdrop-blur-2xl sm:-mx-3 sm:mb-8 sm:rounded-[20px] sm:px-4 sm:py-3 md:sticky md:top-[96px] md:z-30 md:rounded-[22px] lg:top-[86px] lg:-mx-4 lg:px-5 lg:py-4">
           <span className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-rosso/80 to-transparent" />
 
           <div className="flex items-center gap-2.5 lg:gap-4">
@@ -84,7 +84,7 @@ export default function CatalogBrowser() {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Cerca macchina, potenza o formato…"
-                className="w-full rounded-full border border-white/16 bg-white/[0.07] py-3 pl-10 pr-9 text-[13px] text-white outline-none transition-all placeholder:text-white/[0.46] focus:border-rosso/70 focus:bg-white/[0.10] focus:shadow-[0_0_0_4px_rgba(216,35,42,.10)] sm:py-3.5 sm:pl-11 sm:pr-10 sm:text-sm"
+                className="w-full rounded-full border border-white/16 bg-white/[0.07] py-2.5 pl-10 pr-9 text-[13px] text-white outline-none transition-all placeholder:text-white/[0.46] focus:border-rosso/70 focus:bg-white/[0.10] focus:shadow-[0_0_0_4px_rgba(216,35,42,.10)] sm:py-3 sm:pl-11 sm:pr-10 sm:text-sm lg:py-3.5"
               />
               {query && (
                 <button onClick={() => setQuery('')} aria-label="Cancella ricerca" className="absolute right-3 top-1/2 -translate-y-1/2 text-white/[0.5] transition-colors hover:text-rosso sm:right-3.5">
@@ -93,7 +93,7 @@ export default function CatalogBrowser() {
               )}
             </div>
 
-            <div aria-live="polite" className="flex shrink-0 items-center gap-1.5 rounded-full border border-white/12 bg-white/[0.05] px-3 py-3 text-[10px] font-bold uppercase tracking-[0.12em] text-white/[0.72] sm:px-4 sm:text-xs sm:tracking-widest">
+            <div aria-live="polite" className="flex shrink-0 items-center gap-1.5 rounded-full border border-white/12 bg-white/[0.05] px-3 py-2.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white/[0.72] sm:px-4 sm:text-xs sm:tracking-widest lg:py-3">
               <SlidersHorizontal size={12} className="text-rosso" />
               <span>{filtered.length}</span>
               <span className="hidden sm:inline">{filtered.length === 1 ? 'risultato' : 'risultati'}</span>
@@ -104,7 +104,7 @@ export default function CatalogBrowser() {
             Cerca anche nelle specifiche: “18 kW”, “GN 1/1” o un modello.
           </p>
 
-          <div className="relative mt-2.5 sm:mt-3 lg:mt-4">
+          <div className="relative mt-2 sm:mt-2.5 lg:mt-4">
             <button onClick={() => scrollTabs('left')} aria-label="Scorri a sinistra" className="absolute -left-1 top-1/2 z-10 hidden h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/14 bg-[#11151a]/95 text-white/70 transition-all hover:border-rosso/55 hover:text-rosso md:flex"><ChevronLeft size={16} /></button>
             <div ref={tabsRef} className="no-scrollbar -mx-3 flex gap-1.5 overflow-x-auto px-3 sm:-mx-5 sm:gap-2 sm:px-5 md:-mx-10 md:px-10">
               {tabs.map((t) => {
@@ -112,7 +112,7 @@ export default function CatalogBrowser() {
                 const count = t === ALL ? products.length : products.filter((p) => p.category === t).length;
                 const CategoryIcon = categoryIconFor(t);
                 return (
-                  <button key={t} onClick={() => setActive(t)} className={`inline-flex min-h-10 shrink-0 items-center gap-1.5 rounded-full border px-3 py-2 text-[11px] font-semibold transition-all duration-300 sm:px-4 sm:py-2.5 sm:text-[13px] ${isActive ? 'border-rosso bg-rosso text-white shadow-[0_10px_35px_-15px_rgba(216,35,42,.75)]' : 'border-white/14 bg-white/[0.05] text-white/[0.72] hover:border-white/28 hover:bg-white/[0.09] hover:text-white'}`}>
+                  <button key={t} onClick={() => setActive(t)} className={`inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] font-semibold transition-all duration-300 sm:min-h-10 sm:px-4 sm:py-2 sm:text-[13px] ${isActive ? 'border-rosso bg-rosso text-white shadow-[0_10px_35px_-15px_rgba(216,35,42,.75)]' : 'border-white/14 bg-white/[0.05] text-white/[0.72] hover:border-white/28 hover:bg-white/[0.09] hover:text-white'}`}>
                     <CategoryIcon size={13} className={isActive ? 'text-white' : 'text-white/[0.58]'} />
                     {t}
                     <span className={isActive ? 'text-white/[0.78]' : 'text-white/[0.45]'}>{count}</span>
