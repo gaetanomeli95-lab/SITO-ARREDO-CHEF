@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronDown, ChevronLeft, ChevronRight, Search, SlidersHorizontal, X } from 'lucide-react';
+import { ChevronDown, Search, SlidersHorizontal, X } from 'lucide-react';
 import { categories, products } from '@/data/products';
 import { categoryIconFor, getCatalogProduct } from '@/lib/catalog';
 import { track } from '@/lib/analytics';
@@ -20,7 +20,9 @@ const searchIndex = new Map(
   products.map((product) => {
     const catalogProduct = getCatalogProduct(product.slug);
     const technical = catalogProduct
-      ? [catalogProduct.identity.brand, catalogProduct.identity.model, ...catalogProduct.specs.flatMap((spec) => [spec.label, spec.value])].filter(Boolean).join(' ')
+      ? [catalogProduct.identity.brand, catalogProduct.identity.model, ...catalogProduct.specs.flatMap((spec) => [spec.label, spec.value])]
+          .filter(Boolean)
+          .join(' ')
       : '';
     return [product.slug, normalize(`${product.name} ${product.category} ${product.description} ${technical}`)] as const;
   })
@@ -32,14 +34,7 @@ export default function CatalogBrowser() {
   const initial = searchParams.get('categoria');
   const [active, setActive] = useState<string>(initial && categories.includes(initial) ? initial : ALL);
   const [query, setQuery] = useState('');
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  const tabsRef = useRef<HTMLDivElement>(null);
-
-  const scrollTabs = (dir: 'left' | 'right') => {
-    const el = tabsRef.current;
-    if (!el) return;
-    el.scrollBy({ left: dir === 'left' ? -el.clientWidth * 0.6 : el.clientWidth * 0.6, behavior: 'smooth' });
-  };
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -68,100 +63,132 @@ export default function CatalogBrowser() {
 
   const tabs = [ALL, ...categories];
   const ActiveIcon = categoryIconFor(active);
+  const activeCount = active === ALL ? products.length : products.filter((p) => p.category === active).length;
 
   const selectCategory = (category: string) => {
     setActive(category);
-    setMobileFiltersOpen(false);
+    setFiltersOpen(false);
   };
 
   return (
     <section data-nav-theme="light" className="relative bg-[#eef0f1] pb-20 pt-5 text-carbone sm:pt-7 md:pb-28 md:pt-10">
-      <div className="blueprint-light pointer-events-none absolute inset-0 opacity-35" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-44 bg-gradient-to-b from-[#d7dbde]/75 to-transparent" />
+      <div className="blueprint-light pointer-events-none absolute inset-0 opacity-28" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-44 bg-gradient-to-b from-[#d7dbde]/72 to-transparent" />
+
       <div className="container-ac relative">
-        <div className="relative z-20 -mx-2 mb-6 overflow-hidden rounded-[18px] border border-white/10 bg-[#11151a]/[0.96] px-2.5 py-2.5 text-white shadow-[0_20px_55px_-32px_rgba(0,0,0,.68)] backdrop-blur-2xl sm:-mx-3 sm:mb-8 sm:rounded-[20px] sm:px-4 sm:py-3 md:sticky md:top-[96px] md:z-30 md:rounded-[22px] lg:top-[86px] lg:-mx-4 lg:px-5 lg:py-4">
-          <span className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-rosso/80 to-transparent" />
+        <div className="relative z-20 mb-7 overflow-hidden rounded-[24px] border border-carbone/10 bg-[#f7f8f8]/95 shadow-[0_24px_60px_-42px_rgba(11,13,16,.38)] md:mb-9 lg:sticky lg:top-[92px] lg:z-30 lg:rounded-[28px]">
+          <span className="pointer-events-none absolute inset-x-10 top-0 h-[2px] bg-gradient-to-r from-transparent via-rosso/80 to-transparent" />
 
-          <div className="flex items-center gap-2.5 lg:gap-4">
-            <div className="relative min-w-0 flex-1 lg:max-w-lg">
-              <Search size={15} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-white/[0.48] sm:left-4" />
-              <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Cerca macchina, potenza o formato…" className="w-full rounded-full border border-white/16 bg-white/[0.07] py-2.5 pl-10 pr-9 text-[13px] text-white outline-none transition-all placeholder:text-white/[0.46] focus:border-rosso/70 focus:bg-white/[0.10] sm:py-3 sm:pl-11 sm:pr-10 sm:text-sm lg:py-3.5" />
-              {query && <button onClick={() => setQuery('')} aria-label="Cancella ricerca" className="absolute right-3 top-1/2 -translate-y-1/2 text-white/[0.5] hover:text-rosso sm:right-3.5"><X size={15} /></button>}
+          <div className="grid gap-3 p-3 sm:p-4 lg:grid-cols-[minmax(320px,1fr)_auto_auto] lg:items-center lg:gap-4 lg:p-5">
+            <div className="relative min-w-0">
+              <Search size={17} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-carbone/38" />
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Cerca macchina, potenza, formato o modello…"
+                className="w-full rounded-[18px] border border-carbone/12 bg-white py-3.5 pl-11 pr-10 text-[13px] text-carbone outline-none transition-colors placeholder:text-carbone/38 focus:border-rosso/45 sm:text-sm lg:py-4"
+              />
+              {query && (
+                <button
+                  onClick={() => setQuery('')}
+                  aria-label="Cancella ricerca"
+                  className="absolute right-3.5 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-carbone/40 hover:bg-carbone/[0.04] hover:text-rosso"
+                >
+                  <X size={15} />
+                </button>
+              )}
             </div>
-            <div aria-live="polite" className="flex shrink-0 items-center gap-1.5 rounded-full border border-white/12 bg-white/[0.05] px-3 py-2.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white/[0.72] sm:px-4 sm:text-xs sm:tracking-widest lg:py-3"><SlidersHorizontal size={12} className="text-rosso" /><span>{filtered.length}</span><span className="hidden sm:inline">{filtered.length === 1 ? 'risultato' : 'risultati'}</span></div>
-          </div>
 
-          {/* MOBILE — reparto attivo + pannello ordinato, nessuna riga scrollabile */}
-          <div className="mt-2 md:hidden">
             <button
               type="button"
-              onClick={() => setMobileFiltersOpen((open) => !open)}
-              aria-expanded={mobileFiltersOpen}
-              className="flex min-h-11 w-full items-center justify-between gap-4 rounded-[16px] border border-white/12 bg-white/[0.055] px-3.5 text-left"
+              onClick={() => setFiltersOpen((open) => !open)}
+              aria-expanded={filtersOpen}
+              className="flex min-h-[54px] items-center justify-between gap-5 rounded-[18px] border border-carbone/12 bg-[#e7eaeb] px-4 text-left transition-colors hover:border-rosso/25 hover:bg-white lg:min-w-[270px]"
             >
               <span className="flex min-w-0 items-center gap-3">
-                <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl ${active === ALL ? 'bg-rosso text-white' : 'bg-white/[0.08] text-rosso'}`}><ActiveIcon size={14} /></span>
+                <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-[12px] ${active === ALL ? 'bg-rosso text-white' : 'bg-carbone text-white'}`}>
+                  <ActiveIcon size={15} />
+                </span>
                 <span className="min-w-0">
-                  <span className="block text-[8px] font-bold uppercase tracking-[0.2em] text-white/[0.42]">Reparto selezionato</span>
-                  <span className="mt-0.5 block truncate text-[12px] font-bold text-white">{active}</span>
+                  <span className="block text-[8px] font-bold uppercase tracking-[0.2em] text-carbone/38">Reparto</span>
+                  <span className="mt-1 block truncate text-[12px] font-extrabold text-carbone sm:text-[13px]">{active}</span>
                 </span>
               </span>
-              <span className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.16em] text-white/[0.58]">Cambia <ChevronDown size={15} className={`transition-transform ${mobileFiltersOpen ? 'rotate-180' : ''}`} /></span>
+              <span className="flex shrink-0 items-center gap-2 text-[9px] font-bold uppercase tracking-[0.16em] text-carbone/48">
+                Cambia
+                <ChevronDown size={15} className={`transition-transform duration-200 ${filtersOpen ? 'rotate-180' : ''}`} />
+              </span>
             </button>
 
-            <AnimatePresence initial={false}>
-              {mobileFiltersOpen && (
-                <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }} className="overflow-hidden">
-                  <div className="grid grid-cols-2 gap-2 pt-2">
-                    {tabs.map((t) => {
-                      const isActive = t === active;
-                      const count = t === ALL ? products.length : products.filter((p) => p.category === t).length;
-                      const CategoryIcon = categoryIconFor(t);
-                      return (
-                        <button key={t} type="button" onClick={() => selectCategory(t)} className={`min-h-[72px] rounded-[16px] border p-3 text-left transition-all ${isActive ? 'border-rosso bg-rosso text-white' : 'border-white/12 bg-white/[0.045] text-white/[0.76]'}`}>
-                          <div className="flex items-center justify-between gap-2"><CategoryIcon size={14} className={isActive ? 'text-white' : 'text-rosso'} /><span className={`text-[9px] font-bold ${isActive ? 'text-white/75' : 'text-white/[0.35]'}`}>{count}</span></div>
-                          <span className="mt-3 block line-clamp-2 text-[10px] font-bold leading-tight">{t}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            <div aria-live="polite" className="flex min-h-[54px] items-center justify-between gap-4 rounded-[18px] border border-carbone/10 bg-carbone px-4 text-white lg:min-w-[150px]">
+              <span className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.16em] text-white/55">
+                <SlidersHorizontal size={13} className="text-rosso" /> Risultati
+              </span>
+              <span className="font-display text-2xl font-extrabold tabular-nums">{filtered.length}</span>
+            </div>
           </div>
 
-          {/* DESKTOP/TABLET — barra esistente invariata */}
-          <p className="hidden pt-2 pl-4 text-[10px] font-medium tracking-[0.08em] text-white/[0.5] lg:block">Cerca anche nelle specifiche: “18 kW”, “GN 1/1” o un modello.</p>
-          <div className="relative mt-2 hidden md:block sm:mt-2.5 lg:mt-4">
-            <button onClick={() => scrollTabs('left')} aria-label="Scorri a sinistra" className="absolute -left-1 top-1/2 z-10 hidden h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/14 bg-[#11151a]/95 text-white/70 hover:border-rosso/55 hover:text-rosso md:flex"><ChevronLeft size={16} /></button>
-            <div ref={tabsRef} className="no-scrollbar -mx-3 flex gap-1.5 overflow-x-auto px-3 sm:-mx-5 sm:gap-2 sm:px-5 md:-mx-10 md:px-10">
-              {tabs.map((t) => {
-                const isActive = t === active;
-                const count = t === ALL ? products.length : products.filter((p) => p.category === t).length;
-                const CategoryIcon = categoryIconFor(t);
-                return <button key={t} onClick={() => setActive(t)} className={`inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] font-semibold transition-all duration-300 sm:min-h-10 sm:px-4 sm:py-2 sm:text-[13px] ${isActive ? 'border-rosso bg-rosso text-white shadow-[0_10px_35px_-15px_rgba(216,35,42,.75)]' : 'border-white/14 bg-white/[0.05] text-white/[0.72] hover:border-white/28 hover:bg-white/[0.09] hover:text-white'}`}><CategoryIcon size={13} className={isActive ? 'text-white' : 'text-white/[0.58]'} />{t}<span className={isActive ? 'text-white/[0.78]' : 'text-white/[0.45]'}>{count}</span></button>;
-              })}
-            </div>
-            <button onClick={() => scrollTabs('right')} aria-label="Scorri a destra" className="absolute -right-1 top-1/2 z-10 hidden h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/14 bg-[#11151a]/95 text-white/70 hover:border-rosso/55 hover:text-rosso md:flex"><ChevronRight size={16} /></button>
+          <AnimatePresence initial={false}>
+            {filtersOpen && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                className="overflow-hidden border-t border-carbone/10"
+              >
+                <div className="grid grid-cols-2 gap-px bg-carbone/10 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+                  {tabs.map((t) => {
+                    const isActive = t === active;
+                    const count = t === ALL ? products.length : products.filter((p) => p.category === t).length;
+                    const CategoryIcon = categoryIconFor(t);
+                    return (
+                      <button
+                        key={t}
+                        type="button"
+                        onClick={() => selectCategory(t)}
+                        className={`min-h-[86px] bg-[#f7f8f8] p-4 text-left transition-colors hover:bg-white ${isActive ? '!bg-[#171c22] text-white' : 'text-carbone'}`}
+                      >
+                        <div className="flex items-center justify-between gap-3">
+                          <CategoryIcon size={15} className={isActive ? 'text-rosso' : 'text-carbone/45'} />
+                          <span className={`text-[9px] font-bold ${isActive ? 'text-white/45' : 'text-carbone/30'}`}>{count}</span>
+                        </div>
+                        <span className="mt-4 block line-clamp-2 text-[11px] font-extrabold leading-tight">{t}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <div className="hidden items-center justify-between gap-6 border-t border-carbone/10 px-5 py-3 lg:flex">
+            <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-carbone/38">
+              Cerca anche nelle specifiche: 18 kW · GN 1/1 · modello
+            </p>
+            <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-carbone/38">
+              {activeCount} nel reparto selezionato
+            </p>
           </div>
         </div>
 
         {filtered.length > 0 ? (
-          <motion.div layout className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            <AnimatePresence mode="popLayout">
-              {filtered.map((p, i) => (
-                <motion.div key={p.slug} layout initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.96 }} transition={{ duration: 0.4, delay: Math.min(i * 0.025, 0.3), ease: [0.16, 1, 0.3, 1] }}>
-                  <ProductCard product={p} index={i} priority={i < 8} tone="light" />
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </motion.div>
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {filtered.map((p, i) => (
+              <ProductCard key={p.slug} product={p} index={i} priority={i < 4} tone="light" />
+            ))}
+          </div>
         ) : (
-          <div className="py-24 text-center"><p className="font-display text-2xl font-bold text-carbone">Nessun risultato per “{query}”.</p><p className="mt-3 text-sm text-carbone/58">Non trovi quello che cerchi? Il nostro magazzino è più grande del catalogo online.</p><button onClick={() => { setQuery(''); setActive(ALL); }} className="btn-ghost-dark mt-8">Azzera i filtri</button></div>
+          <div className="py-24 text-center">
+            <p className="font-display text-2xl font-bold text-carbone">Nessun risultato per “{query}”.</p>
+            <p className="mt-3 text-sm text-carbone/58">Non trovi quello che cerchi? Il nostro magazzino è più grande del catalogo online.</p>
+            <button onClick={() => { setQuery(''); setActive(ALL); }} className="btn-ghost-dark mt-8">Azzera i filtri</button>
+          </div>
         )}
 
         <div className="relative mt-16 overflow-hidden rounded-[24px] border border-carbone/10 bg-[#d9dde0] p-7 text-center shadow-[0_30px_70px_-45px_rgba(11,13,16,.48)] sm:mt-20 sm:rounded-[28px] sm:p-10 md:p-14">
-          <div className="blueprint-light pointer-events-none absolute inset-0 opacity-35" /><span className="absolute left-0 top-0 h-[3px] w-24 bg-rosso" />
+          <div className="blueprint-light pointer-events-none absolute inset-0 opacity-35" />
+          <span className="absolute left-0 top-0 h-[3px] w-24 bg-rosso" />
           <h3 className="h-display relative text-2xl text-carbone md:text-3xl">Non vedi quello che ti serve?</h3>
           <p className="relative mx-auto mt-4 max-w-lg text-pretty text-[14px] leading-relaxed text-carbone/65 sm:text-[15px]">Il catalogo online è solo una parte. Trattiamo arredo inox su misura, aspirazione, banchi, sedie e tavoli, e usato revisionato che ruota di continuo.</p>
           <Link href="/contatti" className="btn-rosso relative mt-7 sm:mt-8">Chiedi disponibilità</Link>
