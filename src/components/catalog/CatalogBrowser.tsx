@@ -89,11 +89,7 @@ export default function CatalogBrowser() {
                 className="w-full rounded-[18px] border border-carbone/12 bg-white py-3.5 pl-11 pr-10 text-[13px] text-carbone outline-none transition-colors placeholder:text-carbone/38 focus:border-rosso/45 sm:text-sm lg:py-4"
               />
               {query && (
-                <button
-                  onClick={() => setQuery('')}
-                  aria-label="Cancella ricerca"
-                  className="absolute right-3.5 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-carbone/40 hover:bg-carbone/[0.04] hover:text-rosso"
-                >
+                <button onClick={() => setQuery('')} aria-label="Cancella ricerca" className="absolute right-3.5 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-carbone/40 hover:bg-carbone/[0.04] hover:text-rosso">
                   <X size={15} />
                 </button>
               )}
@@ -106,53 +102,29 @@ export default function CatalogBrowser() {
               className="flex min-h-[54px] items-center justify-between gap-5 rounded-[18px] border border-carbone/12 bg-[#e7eaeb] px-4 text-left transition-colors hover:border-rosso/25 hover:bg-white lg:min-w-[270px]"
             >
               <span className="flex min-w-0 items-center gap-3">
-                <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-[12px] ${active === ALL ? 'bg-rosso text-white' : 'bg-carbone text-white'}`}>
-                  <ActiveIcon size={15} />
-                </span>
-                <span className="min-w-0">
-                  <span className="block text-[8px] font-bold uppercase tracking-[0.2em] text-carbone/38">Reparto</span>
-                  <span className="mt-1 block truncate text-[12px] font-extrabold text-carbone sm:text-[13px]">{active}</span>
-                </span>
+                <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-[12px] ${active === ALL ? 'bg-rosso text-white' : 'bg-carbone text-white'}`}><ActiveIcon size={15} /></span>
+                <span className="min-w-0"><span className="block text-[8px] font-bold uppercase tracking-[0.2em] text-carbone/38">Reparto</span><span className="mt-1 block truncate text-[12px] font-extrabold text-carbone sm:text-[13px]">{active}</span></span>
               </span>
-              <span className="flex shrink-0 items-center gap-2 text-[9px] font-bold uppercase tracking-[0.16em] text-carbone/48">
-                Cambia
-                <ChevronDown size={15} className={`transition-transform duration-200 ${filtersOpen ? 'rotate-180' : ''}`} />
-              </span>
+              <span className="flex shrink-0 items-center gap-2 text-[9px] font-bold uppercase tracking-[0.16em] text-carbone/48">Cambia <ChevronDown size={15} className={`transition-transform duration-200 ${filtersOpen ? 'rotate-180' : ''}`} /></span>
             </button>
 
             <div aria-live="polite" className="flex min-h-[54px] items-center justify-between gap-4 rounded-[18px] border border-carbone/10 bg-carbone px-4 text-white lg:min-w-[150px]">
-              <span className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.16em] text-white/55">
-                <SlidersHorizontal size={13} className="text-rosso" /> Risultati
-              </span>
+              <span className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.16em] text-white/55"><SlidersHorizontal size={13} className="text-rosso" /> Risultati</span>
               <span className="font-display text-2xl font-extrabold tabular-nums">{filtered.length}</span>
             </div>
           </div>
 
           <AnimatePresence initial={false}>
             {filtersOpen && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-                className="overflow-hidden border-t border-carbone/10"
-              >
+              <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }} className="overflow-hidden border-t border-carbone/10">
                 <div className="grid grid-cols-2 gap-px bg-carbone/10 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
                   {tabs.map((t) => {
                     const isActive = t === active;
                     const count = t === ALL ? products.length : products.filter((p) => p.category === t).length;
                     const CategoryIcon = categoryIconFor(t);
                     return (
-                      <button
-                        key={t}
-                        type="button"
-                        onClick={() => selectCategory(t)}
-                        className={`min-h-[86px] bg-[#f7f8f8] p-4 text-left transition-colors hover:bg-white ${isActive ? '!bg-[#171c22] text-white' : 'text-carbone'}`}
-                      >
-                        <div className="flex items-center justify-between gap-3">
-                          <CategoryIcon size={15} className={isActive ? 'text-rosso' : 'text-carbone/45'} />
-                          <span className={`text-[9px] font-bold ${isActive ? 'text-white/45' : 'text-carbone/30'}`}>{count}</span>
-                        </div>
+                      <button key={t} type="button" onClick={() => selectCategory(t)} className={`min-h-[86px] bg-[#f7f8f8] p-4 text-left transition-colors hover:bg-white ${isActive ? '!bg-[#171c22] text-white' : 'text-carbone'}`}>
+                        <div className="flex items-center justify-between gap-3"><CategoryIcon size={15} className={isActive ? 'text-rosso' : 'text-carbone/45'} /><span className={`text-[9px] font-bold ${isActive ? 'text-white/45' : 'text-carbone/30'}`}>{count}</span></div>
                         <span className="mt-4 block line-clamp-2 text-[11px] font-extrabold leading-tight">{t}</span>
                       </button>
                     );
@@ -163,19 +135,15 @@ export default function CatalogBrowser() {
           </AnimatePresence>
 
           <div className="hidden items-center justify-between gap-6 border-t border-carbone/10 px-5 py-3 lg:flex">
-            <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-carbone/38">
-              Cerca anche nelle specifiche: 18 kW · GN 1/1 · modello
-            </p>
-            <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-carbone/38">
-              {activeCount} nel reparto selezionato
-            </p>
+            <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-carbone/38">Cerca anche nelle specifiche: 18 kW · GN 1/1 · modello</p>
+            <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-carbone/38">{activeCount} nel reparto selezionato</p>
           </div>
         </div>
 
         {filtered.length > 0 ? (
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
             {filtered.map((p, i) => (
-              <ProductCard key={p.slug} product={p} index={i} priority={i < 4} tone="light" />
+              <ProductCard key={p.slug} product={p} index={i} priority={i < 3} tone="light" />
             ))}
           </div>
         ) : (
