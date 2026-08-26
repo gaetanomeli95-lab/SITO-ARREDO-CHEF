@@ -1,76 +1,136 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, ChevronDown } from 'lucide-react';
+import { ArrowDownRight, ArrowRight, Check, ClipboardList } from 'lucide-react';
+import { categories, products } from '@/data/products';
+import { company } from '@/data/company';
+
+const proof = [
+  { value: String(products.length), label: 'macchine a catalogo' },
+  { value: String(categories.length), label: 'reparti professionali' },
+  { value: `${company.reviews.rating}/5`, label: 'valutazione Google' },
+];
 
 export default function Hero() {
   return (
     <section
-      data-nav-theme="dark"
-      className="relative flex min-h-[100svh] items-center overflow-hidden bg-carbone"
+      data-nav-theme="light"
+      className="relative isolate flex min-h-[760px] overflow-hidden bg-avorio pt-28 lg:min-h-[100svh] lg:pt-32"
     >
-      {/* Immagine di sfondo */}
       <div className="absolute inset-0">
         <Image
-          src="/images/hero-1.webp"
-          alt="Arredo Chef — attrezzature professionali"
+          src="/images/hero-3.webp"
+          alt="Cucina professionale completa con attrezzature in acciaio inox"
           fill
           priority
           sizes="100vw"
-          className="object-cover [filter:brightness(1.15)_contrast(1.05)]"
+          className="object-cover object-[68%_center] lg:object-center"
         />
+        <div className="hero-light-veil absolute inset-0" />
+        <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-avorio via-avorio/55 to-transparent" />
       </div>
 
-      {/* Overlay per leggibilità — solo sul lato sinistro */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-carbone/55 via-carbone/10 to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-carbone/60 to-transparent" />
-      <div className="grain pointer-events-none absolute inset-0" />
+      <div className="blueprint-light pointer-events-none absolute inset-0 opacity-35" />
+      <div className="pointer-events-none absolute left-0 top-0 h-full w-[3px] bg-gradient-to-b from-transparent via-rosso to-transparent" />
 
-      {/* Bagliore */}
-      <div className="pointer-events-none absolute -left-20 top-1/3 h-[24rem] w-[24rem] animate-breathe rounded-full bg-rosso/10 blur-[120px]" />
+      <div className="container-ac relative z-10 flex flex-1 flex-col justify-between pb-7 lg:pb-10">
+        <div className="grid flex-1 items-center gap-12 py-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(280px,.55fr)] lg:py-16">
+          <div className="max-w-[760px]">
+            <div className="flex items-center gap-4">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full border border-rosso/25 bg-white/70 font-display text-[11px] font-extrabold text-rosso shadow-lift-sm backdrop-blur-md">
+                01
+              </span>
+              <span className="text-[10px] font-bold uppercase tracking-widest2 text-carbone/65">
+                Kitchen systems · Sicilia
+              </span>
+            </div>
 
-      {/* Contenuto */}
-      <div className="container-ac relative z-10">
-        <div className="max-w-2xl">
-          <span className="eyebrow text-oro">Arredo Chef SRLS — Villabate (PA)</span>
+            <h1 className="h-display mt-7 max-w-[740px] text-[clamp(3rem,7.2vw,6.75rem)] text-carbone">
+              Il tuo locale,
+              <br />
+              <span className="relative inline-block text-rosso">
+                pronto a lavorare.
+                <span className="absolute -bottom-2 left-0 h-[3px] w-[32%] bg-rosso" />
+              </span>
+            </h1>
 
-          <h1 className="h-display mt-5 text-[clamp(2rem,7vw,5.2rem)] text-white drop-shadow-[0_2px_24px_rgba(11,13,16,0.9)]">
-            Attrezzature professionali
-            <br />
-            <span className="text-rosso">per chi cucina sul serio.</span>
-          </h1>
+            <p className="mt-8 max-w-[610px] text-pretty text-base leading-relaxed text-carbone/75 md:text-lg md:leading-relaxed">
+              Progettiamo e forniamo cucine professionali complete: attrezzature nuove e usate,
+              sopralluogo, preventivo, montaggio e collaudo. Un solo interlocutore, dall&apos;idea
+              alla prima accensione.
+            </p>
 
-          <p className="mt-5 max-w-lg text-pretty text-[15px] leading-relaxed text-white/95 drop-shadow-[0_1px_12px_rgba(11,13,16,0.8)] md:text-lg md:leading-relaxed">
-            Nuove e usate, per ristoranti, bar, hotel, pizzerie e pasticcerie.
-            Sopralluogo, preventivo su budget, fornitura, montaggio e collaudo: chiavi in mano.
-          </p>
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <Link href="/catalogo" className="btn-rosso group sm:min-w-[210px]">
+                Inizia dal catalogo
+                <ArrowRight
+                  size={16}
+                  className="transition-transform duration-300 group-hover:translate-x-1"
+                />
+              </Link>
+              <Link href="#processo" className="btn-ghost-dark bg-white/45 backdrop-blur-md">
+                Scopri il metodo
+                <ArrowDownRight size={15} />
+              </Link>
+            </div>
+          </div>
 
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <Link href="/catalogo" className="btn-rosso group">
-              Sfoglia il catalogo
+          <aside className="panel-cut surface-inox-light hidden w-full max-w-[350px] justify-self-end border border-white/70 p-7 shadow-lift backdrop-blur-xl lg:block">
+            <div className="flex items-center justify-between gap-4">
+              <span className="flex h-11 w-11 items-center justify-center rounded-full bg-carbone text-avorio">
+                <ClipboardList size={18} />
+              </span>
+              <span className="text-[9px] font-bold uppercase tracking-widest2 text-rosso">
+                Il mio progetto
+              </span>
+            </div>
+            <h2 className="mt-7 font-display text-2xl font-extrabold leading-tight tracking-tight text-carbone">
+              Seleziona le macchine. Noi costruiamo la soluzione.
+            </h2>
+            <ul className="mt-6 space-y-3">
+              {[
+                'Salva prodotti e quantità',
+                'Aggiungi note per ogni macchina',
+                'Invia un unico preventivo completo',
+              ].map((item) => (
+                <li key={item} className="flex items-center gap-3 text-[13px] text-carbone/70">
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-rosso/10 text-rosso">
+                    <Check size={11} strokeWidth={3} />
+                  </span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <Link
+              href="/progetto"
+              className="group mt-7 inline-flex items-center gap-2 text-sm font-bold text-carbone transition-colors hover:text-rosso"
+            >
+              Apri il tuo progetto
               <ArrowRight
-                size={16}
+                size={15}
                 className="transition-transform duration-300 group-hover:translate-x-1"
               />
             </Link>
-            <Link href="/contatti" className="btn-ghost-light">
-              Richiedi un preventivo
-            </Link>
-          </div>
+          </aside>
+        </div>
+
+        <div className="grid overflow-hidden rounded-2xl border border-carbone/10 bg-white/[0.72] shadow-lift-sm backdrop-blur-xl sm:grid-cols-3">
+          {proof.map((item, index) => (
+            <div
+              key={item.label}
+              className={`flex items-baseline gap-3 px-5 py-4 sm:px-6 ${
+                index > 0 ? 'border-t border-carbone/10 sm:border-l sm:border-t-0' : ''
+              }`}
+            >
+              <strong className="font-display text-2xl font-extrabold tracking-tight text-carbone">
+                {item.value}
+              </strong>
+              <span className="text-[10px] font-bold uppercase leading-tight tracking-widest text-carbone/45">
+                {item.label}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
-
-      {/* Indicatore di scroll */}
-      <div className="absolute inset-x-0 bottom-8 flex justify-center">
-        <span className="flex flex-col items-center gap-2 text-avorio/50">
-          <span className="text-[10px] font-semibold uppercase tracking-widest2">
-            Scorri per scoprire
-          </span>
-          <ChevronDown size={18} className="animate-bounce" />
-        </span>
-      </div>
-
-      {/* Raccordo verso la sezione successiva */}
-      <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-oro/30 to-transparent" />
     </section>
   );
 }

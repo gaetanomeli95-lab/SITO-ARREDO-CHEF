@@ -5,7 +5,7 @@ import { isInProject, projectActions, useProjectItems } from '@/lib/project/stor
 
 /**
  * CTA "+ Aggiungi al progetto" — presente su card e Machine Cockpit.
- * variant 'card': compatto, dentro un Link (blocca la navigazione).
+ * variant 'card': compatto, accanto al link della scheda prodotto.
  * variant 'cockpit': esteso, con etichetta completa.
  */
 export default function AddToProjectButton({
@@ -55,13 +55,13 @@ export default function AddToProjectButton({
       aria-pressed={added}
       aria-label={added ? `Rimuovi ${name} dal progetto` : `Aggiungi ${name} al progetto`}
       title={added ? 'Rimuovi dal progetto' : 'Aggiungi al progetto'}
-      className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${
+      className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${
         added
           ? 'border-rosso bg-rosso text-white'
           : 'border-carbone/15 bg-white text-carbone/60 hover:border-rosso hover:text-rosso'
       }`}
     >
-      {added ? <Check size={14} strokeWidth={2.5} /> : <Plus size={14} strokeWidth={2.5} />}
+      {added ? <Check size={15} strokeWidth={2.5} /> : <Plus size={15} strokeWidth={2.5} />}
     </button>
   );
 }

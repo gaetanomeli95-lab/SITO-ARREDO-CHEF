@@ -38,13 +38,20 @@ export default function CategoriesSection() {
       <div className="pointer-events-none absolute -right-40 top-20 h-[26rem] w-[26rem] rounded-full bg-rosso/[0.05] blur-[130px]" />
 
       <div className="container-ac relative">
-        <div className="flex flex-wrap items-end justify-between gap-6">
+        <div className="flex flex-wrap items-end justify-between gap-8">
           <Reveal>
-            <span className="eyebrow text-rosso">I reparti</span>
-            <h2 className="h-display mt-6 max-w-xl text-[clamp(2rem,4.5vw,3.5rem)] text-carbone">
-              Tutto quello che serve,
+            <div className="flex items-center gap-4">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full border border-rosso/20 bg-white/70 font-display text-[11px] font-extrabold text-rosso">
+                02
+              </span>
+              <span className="text-[10px] font-bold uppercase tracking-widest2 text-rosso">
+                I reparti
+              </span>
+            </div>
+            <h2 className="h-display mt-7 max-w-3xl text-[clamp(2.5rem,5.4vw,4.7rem)] text-carbone">
+              Ogni macchina al suo posto,
               <br />
-              <span className="text-nebbia">reparto per reparto.</span>
+              <span className="text-nebbia">prima ancora di accenderla.</span>
             </h2>
           </Reveal>
 
@@ -59,36 +66,41 @@ export default function CategoriesSection() {
           </Reveal>
         </div>
 
-        <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 sm:gap-4">
+        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-12">
           {ordered.map((cat, i) => {
             const count = countByCategory(cat);
             const CategoryIcon = categoryIconFor(cat);
+            const span = i === 0 ? 'lg:col-span-7' : i === 1 ? 'lg:col-span-5' : 'lg:col-span-3';
             return (
-              <Reveal key={cat} delay={Math.min(i * 0.06, 0.3)}>
+              <Reveal key={cat} delay={Math.min(i * 0.06, 0.3)} className={span}>
                 <Link
                   href={`/catalogo?categoria=${encodeURIComponent(cat)}`}
-                  className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-carbone/15 bg-white shadow-lift-sm transition-all duration-500 ease-smooth hover:-translate-y-1 hover:border-rosso/25 hover:shadow-lift"
+                  className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-carbone/10 bg-white shadow-lift-sm transition-all duration-500 ease-smooth hover:-translate-y-1 hover:border-rosso/25 hover:shadow-lift"
                 >
                   {/* Immagine */}
-                  <div className="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-avorio via-sabbia to-cemento/60">
+                  <div className="relative h-[230px] overflow-hidden bg-gradient-to-br from-white via-avorio to-cemento/60 lg:h-[285px]">
+                    <div className="blueprint-light pointer-events-none absolute inset-0 opacity-45" />
                     <Image
                       src={coverFor(cat)}
                       alt={cat}
                       fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-contain p-6 transition-transform duration-700 ease-smooth group-hover:scale-105"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 58vw"
+                      className="object-contain p-7 transition-transform duration-700 ease-smooth group-hover:scale-[1.06] lg:p-9"
                     />
+                    <span className="absolute right-5 top-4 font-display text-5xl font-black tracking-tight text-carbone/[0.055]">
+                      0{i + 1}
+                    </span>
                   </div>
 
                   {/* Filo brace */}
                   <span className="absolute inset-x-0 top-0 h-px w-full origin-left scale-x-0 bg-rosso transition-transform duration-600 ease-smooth group-hover:scale-x-100" />
 
                   {/* Footer card */}
-                  <div className="flex flex-1 items-center justify-between px-4 py-3.5 sm:px-5 sm:py-4">
+                  <div className="flex flex-1 items-center justify-between px-5 py-4 sm:px-6 sm:py-5">
                     <div className="flex items-center gap-2">
                       <CategoryIcon size={18} className="shrink-0 text-rosso" />
                       <div>
-                        <h3 className="font-display text-[14px] font-bold leading-tight tracking-tight text-carbone sm:text-[15px]">
+                        <h3 className="font-display text-[15px] font-extrabold leading-tight tracking-tight text-carbone sm:text-[17px]">
                           {cat}
                         </h3>
                         <p className="mt-1 text-xs text-carbone/60">

@@ -14,7 +14,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
-  const tone = useNavTheme('dark');
+  const tone = useNavTheme('light');
 
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 200, damping: 40, mass: 0.4 });
@@ -40,11 +40,11 @@ export default function Navbar() {
   // Colori derivati dal tono della sezione sottostante
   const shell = scrolled
     ? isDark
-      ? 'border-white/10 bg-carbone/72 backdrop-blur-2xl'
-      : 'border-carbone/10 bg-avorio/80 backdrop-blur-2xl'
+      ? 'border-white/10 bg-carbone/[0.86] shadow-lift-sm backdrop-blur-2xl'
+      : 'border-carbone/10 bg-avorio/[0.9] shadow-lift-sm backdrop-blur-2xl'
     : isDark
-      ? 'border-white/5 bg-carbone/30 backdrop-blur-md'
-      : 'border-carbone/5 bg-avorio/30 backdrop-blur-md';
+      ? 'border-white/10 bg-carbone/55 backdrop-blur-xl'
+      : 'border-white/70 bg-white/45 shadow-lift-sm backdrop-blur-xl';
 
   const linkIdle = isDark ? 'text-avorio/65 hover:text-avorio' : 'text-carbone/60 hover:text-carbone';
   const linkActive = isDark ? 'text-avorio' : 'text-carbone';
@@ -52,13 +52,19 @@ export default function Navbar() {
   return (
     <>
       <header
-        className={`fixed inset-x-0 top-0 z-50 border-b transition-all duration-500 ease-smooth ${shell} ${
-          scrolled ? 'py-2.5' : 'py-4'
-        }`}
+        className="pointer-events-none fixed inset-x-0 top-0 z-50 px-3 pt-3 transition-all duration-500 ease-smooth md:px-5"
       >
-        <nav className="container-ac flex items-center justify-between gap-4">
-          <Link href="/" aria-label="Arredo Chef — home" className="group relative z-10">
-            <Logo size={scrolled ? 42 : 50} tone={tone} />
+        <nav
+          className={`container-ac pointer-events-auto flex items-center justify-between gap-4 rounded-[22px] border !px-3 transition-all duration-500 ease-smooth md:!px-4 ${shell} ${
+            scrolled ? 'py-2' : 'py-2.5'
+          }`}
+        >
+          <Link
+            href="/"
+            aria-label="Arredo Chef — home"
+            className="group relative z-10 rounded-2xl bg-carbone px-3 py-1.5 shadow-lift-sm"
+          >
+            <Logo size={scrolled ? 31 : 34} tone="dark" />
           </Link>
 
           {/* Link desktop */}
@@ -117,7 +123,7 @@ export default function Navbar() {
             </a>
 
             <Link href="/contatti" className="btn-rosso !px-5 !py-2.5 !text-[13px]">
-              Richiedi preventivo
+              Parliamo del progetto
             </Link>
           </div>
 
@@ -139,7 +145,7 @@ export default function Navbar() {
         {/* Indicatore di avanzamento lettura */}
         <motion.div
           style={{ scaleX: progress }}
-          className={`absolute inset-x-0 bottom-0 h-[2px] origin-left bg-rosso ${
+          className={`absolute bottom-0 left-7 right-7 h-[2px] origin-left bg-rosso ${
             scrolled ? 'opacity-100' : 'opacity-0'
           } transition-opacity duration-500`}
         />

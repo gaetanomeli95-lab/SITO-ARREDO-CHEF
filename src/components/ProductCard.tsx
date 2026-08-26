@@ -7,14 +7,13 @@ import type { Product } from '@/data/products';
 import { commercialModeBadge, essentialSpecs, getCatalogProduct } from '@/lib/catalog';
 import AddToProjectButton from '@/components/project/AddToProjectButton';
 
-function shortCategory(c: string) {
-  return c.replace(' professionali', '').replace(' professionale', '');
+function shortCategory(category: string) {
+  return category.replace(' professionali', '').replace(' professionale', '');
 }
 
 /**
- * PRODUCT CARD 2.0 — e-commerce ready.
- * Lo stato commerciale arriva dai dati (mai hardcodato); le specifiche
- * essenziali sostituiscono la descrizione quando esistono dati reali.
+ * Card catalogo con azioni semanticamente separate: la scheda prodotto è un
+ * link, mentre “aggiungi al progetto” resta un pulsante indipendente.
  */
 export default function ProductCard({
   product,
@@ -30,74 +29,79 @@ export default function ProductCard({
   const modeBadge = cp ? commercialModeBadge[cp.commercial.mode] : null;
 
   return (
-    <Link
-      href={`/catalogo/${product.slug}`}
-      className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-carbone/10 bg-white shadow-lift-sm transition-all duration-500 ease-smooth hover:-translate-y-1.5 hover:border-rosso/30 hover:shadow-ember"
+    <article
+      data-product-index={index}
+      className="group relative flex h-full min-h-[220px] overflow-hidden rounded-2xl border border-carbone/10 bg-white shadow-lift-sm transition-all duration-500 ease-smooth hover:-translate-y-1.5 hover:border-rosso/30 hover:shadow-ember sm:flex-col"
     >
-      {/* Immagine */}
-      <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-avorio via-sabbia to-cemento/60">
+      <Link
+        href={`/catalogo/${product.slug}`}
+        aria-label={`Apri la scheda di ${product.name}`}
+        className="relative block w-[42%] shrink-0 overflow-hidden bg-gradient-to-br from-white via-avorio to-cemento/55 sm:aspect-square sm:w-full"
+      >
+        <div className="blueprint-light pointer-events-none absolute inset-0 opacity-45" />
         <Image
           src={product.image}
           alt={product.name}
           fill
           priority={priority}
-          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-          className="object-contain p-5 transition-transform duration-700 ease-smooth group-hover:scale-105"
+          sizes="(max-width: 639px) 42vw, (max-width: 1024px) 50vw, 25vw"
+          className="object-contain p-4 transition-transform duration-700 ease-smooth group-hover:scale-[1.06] sm:p-6"
         />
-      </div>
 
-      {/* Badge categoria */}
-      <span className="absolute left-2.5 top-2.5 z-10 rounded-full border border-carbone/15 bg-white/90 px-2 py-0.5 text-[8px] font-bold uppercase tracking-widest text-carbone/70 backdrop-blur-sm sm:left-3 sm:top-3 sm:px-2.5 sm:py-1 sm:text-[9px]">
-        {shortCategory(product.category)}
-      </span>
-
-      {/* Badge stato commerciale (data-driven) */}
-      {modeBadge && (
-        <span className="absolute right-2.5 top-2.5 z-10 rounded-full bg-rosso/10 px-2 py-0.5 text-[8px] font-bold uppercase tracking-widest text-rosso sm:right-3 sm:top-3 sm:px-2.5 sm:py-1 sm:text-[9px]">
-          {modeBadge}
+        <span className="absolute left-2.5 top-2.5 z-10 max-w-[75%] truncate rounded-full border border-carbone/10 bg-white/90 px-2.5 py-1 text-[8px] font-bold uppercase tracking-widest text-carbone/65 backdrop-blur-md sm:left-3 sm:top-3 sm:text-[9px]">
+          {shortCategory(product.category)}
         </span>
-      )}
 
-      {/* Testo */}
-      <div className="flex flex-1 flex-col px-4 py-3.5 sm:px-5 sm:py-4">
-        <h3 className="font-display text-[14px] font-bold leading-snug tracking-tight text-carbone sm:text-[15px]">
-          {product.name}
-        </h3>
+        {modeBadge && (
+          <span className="absolute bottom-2.5 left-2.5 z-10 rounded-full bg-carbone px-2.5 py-1 text-[8px] font-bold uppercase tracking-widest text-avorio sm:bottom-auto sm:left-auto sm:right-3 sm:top-3 sm:text-[9px]">
+            {modeBadge}
+          </span>
+        )}
+      </Link>
+
+      <div className="flex min-w-0 flex-1 flex-col px-4 py-4 sm:px-5 sm:py-5">
+        <Link href={`/catalogo/${product.slug}`} className="outline-none focus-visible:text-rosso">
+          <h3 className="font-display text-[15px] font-extrabold leading-snug tracking-tight text-carbone transition-colors duration-300 group-hover:text-rosso sm:text-[16px]">
+            {product.name}
+          </h3>
+        </Link>
 
         {specs.length > 0 ? (
-          <ul className="mt-2 space-y-1">
-            {specs.map((s) => (
-              <li
-                key={s.label}
-                className="flex items-baseline justify-between gap-2 text-[11px] leading-relaxed sm:text-[12px]"
+          <dl className="mt-3 space-y-1.5">
+            {specs.map((spec) => (
+              <div
+                key={spec.label}
+                className="flex items-baseline justify-between gap-3 border-b border-carbone/[0.06] pb-1.5 text-[11px] leading-relaxed sm:text-[12px]"
               >
-                <span className="text-carbone/50">{s.label}</span>
-                <span className="text-right font-semibold tabular-nums text-carbone/80">
-                  {s.value}
-                </span>
-              </li>
+                <dt className="text-carbone/45">{spec.label}</dt>
+                <dd className="text-right font-semibold tabular-nums text-carbone/80">
+                  {spec.value}
+                </dd>
+              </div>
             ))}
-          </ul>
+          </dl>
         ) : (
-          <p className="mt-2 line-clamp-2 text-[12px] leading-relaxed text-carbone/70 sm:text-[13px]">
+          <p className="mt-3 line-clamp-3 text-[12px] leading-relaxed text-carbone/60 sm:line-clamp-2 sm:text-[13px]">
             {product.description}
           </p>
         )}
 
-        <div className="mt-auto flex items-center justify-between gap-2 pt-3 sm:pt-4">
-          <span className="text-[11px] font-bold uppercase tracking-widest text-rosso">
-            Scheda e preventivo
-          </span>
-          <span className="flex items-center gap-1.5">
-            <AddToProjectButton slug={product.slug} name={product.name} variant="card" />
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-carbone/[0.06] text-carbone/70 transition-all duration-300 group-hover:bg-rosso group-hover:text-white">
-              <ArrowUpRight size={14} strokeWidth={2.5} />
-            </span>
-          </span>
+        <div className="mt-auto flex items-center justify-between gap-3 pt-4">
+          <Link
+            href={`/catalogo/${product.slug}`}
+            className="group/link inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-carbone transition-colors hover:text-rosso sm:text-[11px]"
+          >
+            Scheda tecnica
+            <ArrowUpRight
+              size={14}
+              className="transition-transform duration-300 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
+            />
+          </Link>
+          <AddToProjectButton slug={product.slug} name={product.name} variant="card" />
         </div>
       </div>
-    {/* Red Line — accents the card on hover */}
-    <span className="absolute bottom-0 left-0 h-[2px] w-0 bg-gradient-to-r from-rosso to-rosso/60 transition-all duration-500 ease-smooth group-hover:w-full" />
-    </Link>
+
+      <span className="absolute bottom-0 left-0 h-[2px] w-0 bg-gradient-to-r from-rosso to-rosso/50 transition-all duration-500 ease-smooth group-hover:w-full" />
+    </article>
   );
 }

@@ -1,9 +1,6 @@
-'use client';
-
-import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Check, ClipboardList } from 'lucide-react';
 import { products } from '@/data/products';
 import ProductCard from '@/components/ProductCard';
 import Reveal from '@/components/Reveal';
@@ -19,117 +16,98 @@ const featuredSlugs = [
   'affettatrice-per-salumi',
 ];
 
-// Simula "Novità" — ultimi prodotti del catalogo
-const newArrivalSlugs = [
-  'tagliaverdure-e-tritamozzarella',
-  'vetrina-refrigerata-da-banco',
-  'armadio-frigorifero-tn-700-lt',
-  'banco-refrigerato-3-porte-con-alzatina',
-  'banchi-vetrine-espositiva-refrigerate-macelleria-salumeria',
-  'friggitrice-elettrica-professionale',
-  'impastatrice-a-spirale-ip-30',
-  'lavastoviglie-a-cappotta',
-];
-
-// Simula "Usato revisionato" — stessa lista ma con badge diverso in futuro
-const usedSlugs = [
-  'forno-pizza-ctz',
-  'impastatrice-a-spirale-ip-50',
-  'abbattitore-5-teglie',
-  'affettatrice-per-salumi',
-  'armadio-frigorifero-tn-1400',
-  'cucina-a-gas-4-fuochi',
-  'macchine-per-la-produzione-di-ghiaccio-cubetto-pieno',
-  'vetrina-refrigerata-da-banco',
-];
-
-type TabKey = 'richiesti' | 'novita' | 'usato';
-
-const tabs: { key: TabKey; label: string; slugs: string[] }[] = [
-  { key: 'richiesti', label: 'Più richiesti', slugs: featuredSlugs },
-  { key: 'novita', label: 'Novità', slugs: newArrivalSlugs },
-  { key: 'usato', label: 'Usato revisionato', slugs: usedSlugs },
+const projectBenefits = [
+  'Specifiche disponibili in scheda',
+  'Prodotti salvati sul dispositivo',
+  'Un solo preventivo per tutto il progetto',
 ];
 
 export default function FeaturedProducts() {
-  const [active, setActive] = useState<TabKey>('richiesti');
-
-  const currentTab = tabs.find((t) => t.key === active)!;
-  const list = currentTab.slugs
-    .map((s) => products.find((p) => p.slug === s))
-    .filter((p): p is (typeof products)[number] => Boolean(p))
-    .slice(0, 8);
+  const list = featuredSlugs
+    .map((slug) => products.find((product) => product.slug === slug))
+    .filter((product): product is (typeof products)[number] => Boolean(product));
 
   return (
     <section
       data-nav-theme="light"
-      className="relative overflow-hidden bg-gradient-to-b from-sabbia via-avorio to-sabbia py-16 md:py-24 lg:py-32"
+      className="relative overflow-hidden bg-gradient-to-b from-sabbia via-avorio to-sabbia py-20 md:py-28 lg:py-36"
     >
-      {/* Immagine di sfondo */}
-      <div className="pointer-events-none absolute inset-0">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[520px]">
         <Image
           src="/images/hero-evidenza.webp"
           alt=""
           fill
           sizes="100vw"
-          className="object-cover opacity-20 [filter:brightness(1.1)]"
+          className="object-cover opacity-25"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-sabbia/80 via-avorio/70 to-sabbia/80" />
+        <div className="absolute inset-0 bg-gradient-to-b from-sabbia/55 via-avorio/90 to-sabbia" />
       </div>
-      <div className="pointer-events-none absolute -left-40 bottom-10 h-96 w-96 rounded-full bg-oro/[0.05] blur-[130px]" />
+      <div className="blueprint-light pointer-events-none absolute inset-0 opacity-30" />
 
       <div className="container-ac relative">
-        <div className="flex flex-wrap items-end justify-between gap-6">
+        <div className="grid gap-8 lg:grid-cols-[1fr_360px] lg:items-end">
           <Reveal>
-            <span className="eyebrow text-rosso">In evidenza</span>
-            <h2 className="h-display mt-6 max-w-2xl text-[clamp(2rem,4.5vw,3.5rem)] text-carbone">
-              Le macchine che fanno
+            <div className="flex items-center gap-4">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full border border-rosso/20 bg-white/70 font-display text-[11px] font-extrabold text-rosso">
+                03
+              </span>
+              <span className="text-[10px] font-bold uppercase tracking-widest2 text-rosso">
+                Catalogo operativo
+              </span>
+            </div>
+            <h2 className="h-display mt-7 max-w-3xl text-[clamp(2.5rem,5.4vw,4.7rem)] text-carbone">
+              Non una vetrina.
               <br />
-              <span className="text-nebbia">lavorare la tua cucina.</span>
+              <span className="text-nebbia">Il punto di partenza del tuo progetto.</span>
             </h2>
           </Reveal>
 
           <Reveal delay={0.1}>
+            <div className="panel-cut border border-carbone/10 bg-white/80 p-6 shadow-lift-sm backdrop-blur-xl">
+              <div className="flex items-center gap-3">
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-carbone text-avorio">
+                  <ClipboardList size={16} />
+                </span>
+                <p className="font-display text-sm font-extrabold text-carbone">Il mio progetto</p>
+              </div>
+              <ul className="mt-5 space-y-2.5">
+                {projectBenefits.map((benefit) => (
+                  <li key={benefit} className="flex items-start gap-2.5 text-xs leading-relaxed text-carbone/65">
+                    <Check size={13} className="mt-0.5 shrink-0 text-rosso" strokeWidth={3} />
+                    {benefit}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href="/progetto"
+                className="group mt-5 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-carbone hover:text-rosso"
+              >
+                Apri il progetto
+                <ArrowRight size={13} className="transition-transform group-hover:translate-x-1" />
+              </Link>
+            </div>
+          </Reveal>
+        </div>
+
+        <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {list.map((product, index) => (
+            <Reveal key={product.slug} delay={Math.min(index * 0.04, 0.2)}>
+              <ProductCard product={product} index={index} priority={index < 4} />
+            </Reveal>
+          ))}
+        </div>
+
+        <Reveal delay={0.1}>
+          <div className="mt-10 flex justify-center">
             <Link href="/catalogo" className="btn-rosso group">
-              Sfoglia il catalogo
+              Esplora tutto il catalogo
               <ArrowRight
                 size={15}
                 className="transition-transform duration-300 group-hover:translate-x-1"
               />
             </Link>
-          </Reveal>
-        </div>
-
-        {/* Tab */}
-        <Reveal delay={0.05}>
-          <div className="no-scrollbar mt-10 flex gap-2 overflow-x-auto border-b border-carbone/10 pb-px">
-            {tabs.map((t) => (
-              <button
-                key={t.key}
-                onClick={() => setActive(t.key)}
-                className={`relative shrink-0 px-5 py-3 text-sm font-bold transition-colors duration-300 ${
-                  active === t.key
-                    ? 'text-rosso'
-                    : 'text-carbone/50 hover:text-carbone'
-                }`}
-              >
-                {t.label}
-                {active === t.key && (
-                  <span className="absolute inset-x-0 -bottom-px h-0.5 bg-rosso" />
-                )}
-              </button>
-            ))}
           </div>
         </Reveal>
-
-        {/* Grid prodotti */}
-        <div className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 md:gap-4">
-          {list.map((p, i) => (
-            <Reveal key={`${active}-${p.slug}`} delay={Math.min(i * 0.04, 0.2)}>
-              <ProductCard product={p} index={i} priority={i < 4} />
-            </Reveal>
-          ))}
-        </div>
       </div>
     </section>
   );

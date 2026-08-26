@@ -36,32 +36,31 @@ const options = [
 export default function NuovoUsato() {
   return (
     <section
-      data-nav-theme="dark"
-      className="relative overflow-hidden bg-carbone py-20 md:py-28 lg:py-36"
+      data-nav-theme="light"
+      className="relative overflow-hidden bg-gradient-to-b from-avorio via-sabbia to-avorio py-20 md:py-28 lg:py-36"
     >
-      <div className="blueprint pointer-events-none absolute inset-0 opacity-60" />
-      <div className="grain pointer-events-none absolute inset-0" />
+      <div className="blueprint-light pointer-events-none absolute inset-0 opacity-55" />
 
-      <div className="pointer-events-none absolute -left-40 top-1/4 h-[26rem] w-[26rem] animate-breathe rounded-full bg-rosso/10 blur-[140px]" />
-      <div className="pointer-events-none absolute -right-40 bottom-1/4 h-[26rem] w-[26rem] rounded-full bg-oro/[0.07] blur-[140px]" />
+      <div className="pointer-events-none absolute -left-40 top-1/4 h-[26rem] w-[26rem] animate-breathe rounded-full bg-rosso/[0.06] blur-[140px]" />
+      <div className="pointer-events-none absolute -right-40 bottom-1/4 h-[26rem] w-[26rem] rounded-full bg-oro/[0.06] blur-[140px]" />
 
       {/* Marchio in filigrana */}
-      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[34rem] w-[34rem] -translate-x-1/2 -translate-y-1/2 opacity-[0.035]">
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[34rem] w-[34rem] -translate-x-1/2 -translate-y-1/2 opacity-[0.018]">
         <Image src="/images/logo-mark.webp" alt="" fill sizes="544px" className="object-contain" />
       </div>
 
       <div className="container-ac relative">
         <div className="mx-auto max-w-2xl text-center">
           <Reveal>
-            <span className="eyebrow justify-center text-oro">Due strade, stesso servizio</span>
-            <h2 className="h-display mt-6 text-[clamp(2.1rem,4.8vw,3.7rem)] text-avorio">
+            <span className="eyebrow justify-center text-rosso">Due strade, stesso servizio</span>
+            <h2 className="h-display mt-6 text-[clamp(2.1rem,4.8vw,3.7rem)] text-carbone">
               Nuovo o usato?
               <br />
               <span className="text-nebbia">Dipende dal tuo budget,</span>
               <br />
               non dalle nostre provvigioni.
             </h2>
-            <p className="mx-auto mt-6 max-w-xl text-pretty text-base leading-relaxed text-cenere/85">
+            <p className="mx-auto mt-6 max-w-xl text-pretty text-base leading-relaxed text-carbone/65">
               Ti diciamo con onestà dove conviene investire nel nuovo e dove un usato revisionato fa
               esattamente lo stesso lavoro. Spesso la cucina migliore è un mix delle due cose.
             </p>

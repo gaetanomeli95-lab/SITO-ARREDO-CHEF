@@ -19,49 +19,65 @@ export default function PageHeader({
 }) {
   return (
     <section
-      data-nav-theme="dark"
-      className="relative overflow-hidden bg-carbone pb-20 pt-36 md:pb-24 md:pt-44"
+      data-nav-theme="light"
+      className="relative isolate min-h-[570px] overflow-hidden bg-avorio pb-20 pt-36 md:pt-44 lg:flex lg:min-h-[680px] lg:items-center"
     >
-      <div className="pointer-events-none absolute inset-0">
-        <Image src={image} alt="" fill sizes="100vw" priority className="object-cover opacity-70 [filter:brightness(1.1)]" />
-        <div className="absolute inset-0 bg-gradient-to-r from-carbone/65 via-carbone/30 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-carbone to-transparent" />
+      <div className="absolute inset-0">
+        <Image
+          src={image}
+          alt=""
+          fill
+          sizes="100vw"
+          priority
+          className="object-cover object-[66%_center] lg:object-center"
+        />
+        <div className="hero-light-veil absolute inset-0" />
+        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-avorio to-transparent" />
       </div>
-      <div className="blueprint pointer-events-none absolute inset-0 opacity-50" />
-      <div className="grain pointer-events-none absolute inset-0" />
-      <div className="pointer-events-none absolute -left-32 top-1/3 h-80 w-80 animate-breathe rounded-full bg-rosso/10 blur-[130px]" />
+      <div className="blueprint-light pointer-events-none absolute inset-0 opacity-30" />
 
       <div className="container-ac relative">
-        {crumbs.length > 0 && (
-          <nav className="mb-7 flex flex-wrap items-center gap-1.5 text-xs text-cenere/45">
-            <Link href="/" className="transition-colors hover:text-avorio">
-              Home
-            </Link>
-            {crumbs.map((c) => (
-              <span key={c.label} className="flex items-center gap-1.5">
-                <ChevronRight size={12} className="text-cenere/25" />
-                {c.href ? (
-                  <Link href={c.href} className="transition-colors hover:text-avorio">
-                    {c.label}
-                  </Link>
-                ) : (
-                  <span className="text-cenere/70">{c.label}</span>
-                )}
-              </span>
-            ))}
-          </nav>
-        )}
+        <div className="max-w-[760px]">
+          {crumbs.length > 0 && (
+            <nav className="mb-8 flex flex-wrap items-center gap-1.5 text-xs text-carbone/45">
+              <Link href="/" className="transition-colors hover:text-rosso">
+                Home
+              </Link>
+              {crumbs.map((c) => (
+                <span key={c.label} className="flex items-center gap-1.5">
+                  <ChevronRight size={12} className="text-carbone/20" />
+                  {c.href ? (
+                    <Link href={c.href} className="transition-colors hover:text-rosso">
+                      {c.label}
+                    </Link>
+                  ) : (
+                    <span className="text-carbone/65">{c.label}</span>
+                  )}
+                </span>
+              ))}
+            </nav>
+          )}
 
-        <span className="eyebrow text-oro">{eyebrow}</span>
-        <h1 className="h-display mt-5 max-w-3xl text-[clamp(2.3rem,5.6vw,4.3rem)] text-avorio">
-          {title}
-        </h1>
-        {lead && (
-          <p className="mt-6 max-w-xl text-pretty text-base leading-relaxed text-cenere/65">
-            {lead}
-          </p>
-        )}
+          <div className="flex items-center gap-4">
+            <span className="h-px w-12 bg-rosso" />
+            <span className="text-[10px] font-bold uppercase tracking-widest2 text-rosso">
+              {eyebrow}
+            </span>
+          </div>
+          <h1 className="h-display mt-6 max-w-3xl text-[clamp(2.8rem,6vw,5.7rem)] text-carbone">
+            {title}
+          </h1>
+          {lead && (
+            <p className="mt-7 max-w-xl text-pretty text-base leading-relaxed text-carbone/70 md:text-lg md:leading-relaxed">
+              {lead}
+            </p>
+          )}
+        </div>
       </div>
+
+      <span className="absolute bottom-7 right-7 hidden text-[9px] font-bold uppercase tracking-widest2 text-carbone/35 lg:block">
+        Arredo Chef · Kitchen systems
+      </span>
     </section>
   );
 }

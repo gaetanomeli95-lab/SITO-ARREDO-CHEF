@@ -1,15 +1,43 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Search, SlidersHorizontal, X } from 'lucide-react';
 import { categories, products } from '@/data/products';
-import { categoryIconFor } from '@/lib/catalog';
+import { categoryIconFor, getCatalogProduct } from '@/lib/catalog';
 import { track } from '@/lib/analytics';
 import ProductCard from '@/components/ProductCard';
 
 const ALL = 'Tutti i reparti';
+
+function normalize(value: string) {
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+}
+
+const searchIndex = new Map(
+  products.map((product) => {
+    const catalogProduct = getCatalogProduct(product.slug);
+    const technical = catalogProduct
+      ? [
+          catalogProduct.identity.brand,
+          catalogProduct.identity.model,
+          ...catalogProduct.specs.flatMap((spec) => [spec.label, spec.value]),
+        ]
+          .filter(Boolean)
+          .join(' ')
+      : '';
+
+    return [
+      product.slug,
+      normalize(`${product.name} ${product.category} ${product.description} ${technical}`),
+    ] as const;
+  })
+);
 
 export default function CatalogBrowser() {
   const router = useRouter();
@@ -47,14 +75,11 @@ export default function CatalogBrowser() {
   }, [query]);
 
   const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    const terms = normalize(query.trim()).split(/\s+/).filter(Boolean);
     return products.filter((p) => {
       const okCat = active === ALL || p.category === active;
-      const okQuery =
-        !q ||
-        p.name.toLowerCase().includes(q) ||
-        p.category.toLowerCase().includes(q) ||
-        p.description.toLowerCase().includes(q);
+      const indexed = searchIndex.get(p.slug) ?? '';
+      const okQuery = terms.length === 0 || terms.every((term) => indexed.includes(term));
       return okCat && okQuery;
     });
   }, [active, query]);
@@ -72,29 +97,37 @@ export default function CatalogBrowser() {
         <div className="sticky top-[72px] z-30 -mx-6 mb-10 border-b border-carbone/10 bg-avorio/90 px-6 py-4 backdrop-blur-xl md:-mx-10 md:px-10">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             {/* Ricerca */}
-            <div className="relative w-full lg:max-w-sm">
-              <Search
-                size={16}
-                className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-carbone/35"
-              />
-              <input
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Cerca una macchina…"
-                className="w-full rounded-full border border-carbone/12 bg-white py-3 pl-11 pr-10 text-sm text-carbone outline-none transition-all duration-300 placeholder:text-carbone/35 focus:border-rosso/50 focus:shadow-lift-sm"
-              />
-              {query && (
-                <button
-                  onClick={() => setQuery('')}
-                  aria-label="Cancella ricerca"
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-carbone/35 transition-colors hover:text-rosso"
-                >
-                  <X size={15} />
-                </button>
-              )}
+            <div className="w-full lg:max-w-lg">
+              <div className="relative">
+                <Search
+                  size={16}
+                  className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-carbone/35"
+                />
+                <input
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Cerca macchina, potenza o formato…"
+                  className="w-full rounded-full border border-carbone/12 bg-white py-3.5 pl-11 pr-10 text-sm text-carbone outline-none transition-all duration-300 placeholder:text-carbone/35 focus:border-rosso/50 focus:shadow-lift-sm"
+                />
+                {query && (
+                  <button
+                    onClick={() => setQuery('')}
+                    aria-label="Cancella ricerca"
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-carbone/35 transition-colors hover:text-rosso"
+                  >
+                    <X size={15} />
+                  </button>
+                )}
+              </div>
+              <p className="mt-2 pl-4 text-[10px] font-medium text-carbone/40">
+                Cerca anche nelle specifiche: per esempio “18 kW”, “GN 1/1” o un modello.
+              </p>
             </div>
 
-            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-carbone/45">
+            <div
+              aria-live="polite"
+              className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-carbone/45"
+            >
               <SlidersHorizontal size={13} />
               {filtered.length} {filtered.length === 1 ? 'risultato' : 'risultati'}
             </div>
@@ -154,7 +187,7 @@ export default function CatalogBrowser() {
         {filtered.length > 0 ? (
           <motion.div
             layout
-            className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4"
+            className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
           >
             <AnimatePresence mode="popLayout">
               {filtered.map((p, i) => (
@@ -205,9 +238,9 @@ export default function CatalogBrowser() {
             Il catalogo online è solo una parte. Trattiamo arredo inox su misura, aspirazione,
             banchi, sedie e tavoli, e abbiamo usato revisionato che ruota di continuo.
           </p>
-          <a href="/contatti" className="btn-rosso relative mt-8">
+          <Link href="/contatti" className="btn-rosso relative mt-8">
             Chiedi disponibilità
-          </a>
+          </Link>
         </div>
       </div>
     </section>
