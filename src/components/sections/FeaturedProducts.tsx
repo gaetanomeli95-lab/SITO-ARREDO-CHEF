@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowRight, ArrowUpRight, Gauge, Layers3, Radio } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Gauge, Layers3, Radio } from 'lucide-react';
 import { products } from '@/data/products';
 import { essentialSpecs, getCatalogProduct } from '@/lib/catalog';
 import AddToProjectButton from '@/components/project/AddToProjectButton';
@@ -28,6 +28,10 @@ export default function FeaturedProducts() {
   const selected = featured[activeIndex] ?? featured[0];
   const catalogProduct = getCatalogProduct(selected.slug);
   const specs = catalogProduct ? essentialSpecs(catalogProduct, 5) : [];
+
+  const stepMachine = (dir: -1 | 1) => {
+    setActiveIndex((current) => (current + dir + featured.length) % featured.length);
+  };
 
   return (
     <section data-nav-theme="dark" className="relative overflow-hidden bg-carbone py-16 text-avorio sm:py-20 md:py-28 lg:py-36">
@@ -59,21 +63,82 @@ export default function FeaturedProducts() {
           <div className="relative mt-8 overflow-hidden rounded-[24px] border border-white/12 bg-[#08090b] shadow-[0_45px_120px_-55px_rgba(0,0,0,.95)] sm:mt-12 sm:rounded-[30px] lg:min-h-[650px]">
             <span className="pointer-events-none absolute inset-x-8 top-0 z-20 h-px bg-gradient-to-r from-transparent via-rosso/70 to-transparent sm:inset-x-10" />
             <div className="grid lg:min-h-[650px] lg:grid-cols-[190px_minmax(0,1fr)_370px]">
-              <div className="relative z-20 flex gap-2 overflow-x-auto border-b border-white/10 bg-carbone/80 p-2.5 backdrop-blur-xl sm:p-3 lg:flex-col lg:overflow-visible lg:border-b-0 lg:border-r lg:p-4">
-                <div className="mb-2 hidden items-center gap-2 px-2 pb-3 text-[8px] font-bold uppercase tracking-[0.3em] text-white/[0.42] lg:flex">
+              {/* Mobile: one deliberate navigator, no horizontal dragging */}
+              <div className="relative z-20 border-b border-white/10 bg-carbone/88 p-3 backdrop-blur-xl lg:hidden">
+                <div className="grid grid-cols-[44px_minmax(0,1fr)_44px] items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => stepMachine(-1)}
+                    aria-label="Macchina precedente"
+                    className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-white/[0.78] transition-colors active:border-rosso active:text-rosso"
+                  >
+                    <ChevronLeft size={18} />
+                  </button>
+
+                  <AnimatePresence mode="wait">
+                    <motion.button
+                      key={selected.slug}
+                      type="button"
+                      onClick={() => stepMachine(1)}
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -6 }}
+                      transition={{ duration: 0.22 }}
+                      className="flex min-w-0 items-center gap-3 rounded-[18px] border border-white/10 bg-white/[0.045] px-3 py-2.5 text-left"
+                    >
+                      <span className="relative h-11 w-11 shrink-0 overflow-hidden rounded-xl bg-white/[0.07]">
+                        <Image src={selected.image} alt="" fill sizes="44px" className="object-contain p-1.5" />
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-[8px] font-bold uppercase tracking-[0.22em] text-rosso">M-{String(activeIndex + 1).padStart(2, '0')} / {String(featured.length).padStart(2, '0')}</span>
+                        <span className="mt-1 block truncate text-[11px] font-bold text-white">{selected.name}</span>
+                      </span>
+                    </motion.button>
+                  </AnimatePresence>
+
+                  <button
+                    type="button"
+                    onClick={() => stepMachine(1)}
+                    aria-label="Macchina successiva"
+                    className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-white/[0.78] transition-colors active:border-rosso active:text-rosso"
+                  >
+                    <ChevronRight size={18} />
+                  </button>
+                </div>
+
+                <div className="mt-3 grid grid-cols-6 gap-1.5" aria-label="Seleziona macchina">
+                  {featured.map((product, index) => {
+                    const active = index === activeIndex;
+                    return (
+                      <button
+                        key={product.slug}
+                        type="button"
+                        onClick={() => setActiveIndex(index)}
+                        aria-label={`Macchina ${index + 1}: ${product.name}`}
+                        aria-pressed={active}
+                        className={`h-1.5 rounded-full transition-all ${active ? 'bg-rosso shadow-[0_0_10px_rgba(216,35,42,.75)]' : 'bg-white/15'}`}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Desktop index stays unchanged */}
+              <div className="relative z-20 hidden gap-2 border-r border-white/10 bg-carbone/80 p-4 backdrop-blur-xl lg:flex lg:flex-col">
+                <div className="mb-2 flex items-center gap-2 px-2 pb-3 text-[8px] font-bold uppercase tracking-[0.3em] text-white/[0.42]">
                   <Layers3 size={11} className="text-rosso" /> Machine index
                 </div>
                 {featured.map((product, index) => {
                   const active = index === activeIndex;
                   return (
                     <button key={product.slug} type="button" onClick={() => setActiveIndex(index)} aria-pressed={active}
-                      className={`group relative flex min-w-[128px] items-center gap-2.5 overflow-hidden rounded-2xl border px-2.5 py-2.5 text-left transition-all duration-300 sm:min-w-[150px] sm:gap-3 sm:px-3 sm:py-3 lg:min-w-0 ${active ? 'border-rosso/55 bg-rosso/[0.10] text-white' : 'border-white/[0.08] bg-white/[0.03] text-white/[0.64] hover:border-white/18 hover:text-white'}`}>
-                      <span className="relative h-10 w-10 shrink-0 overflow-hidden rounded-xl bg-gradient-to-br from-white/12 to-white/[0.02] sm:h-12 sm:w-12">
+                      className={`group relative flex items-center gap-3 overflow-hidden rounded-2xl border px-3 py-3 text-left transition-all duration-300 ${active ? 'border-rosso/55 bg-rosso/[0.10] text-white' : 'border-white/[0.08] bg-white/[0.03] text-white/[0.64] hover:border-white/18 hover:text-white'}`}>
+                      <span className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-gradient-to-br from-white/12 to-white/[0.02]">
                         <Image src={product.image} alt="" fill sizes="48px" className="object-contain p-1.5" />
                       </span>
                       <span className="min-w-0">
-                        <span className="block text-[7px] font-bold uppercase tracking-[0.18em] text-rosso sm:text-[8px] sm:tracking-[0.22em]">M-{String(index + 1).padStart(2, '0')}</span>
-                        <span className="mt-1 block line-clamp-2 text-[9px] font-semibold leading-snug sm:text-[10px]">{product.name}</span>
+                        <span className="block text-[8px] font-bold uppercase tracking-[0.22em] text-rosso">M-{String(index + 1).padStart(2, '0')}</span>
+                        <span className="mt-1 block line-clamp-2 text-[10px] font-semibold leading-snug">{product.name}</span>
                       </span>
                       {active && <span className="absolute bottom-0 left-3 right-3 h-px bg-rosso" />}
                     </button>
@@ -86,7 +151,7 @@ export default function FeaturedProducts() {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#08090b] via-transparent to-[#08090b]/30" />
                 <div className="blueprint pointer-events-none absolute inset-0 opacity-30" />
                 <div className="absolute left-4 top-4 z-10 flex items-center gap-2 rounded-full border border-white/12 bg-black/38 px-3 py-2 text-[7px] font-bold uppercase tracking-[0.2em] text-white/[0.62] backdrop-blur-md sm:left-5 sm:top-5 sm:text-[8px] sm:tracking-[0.25em]">
-                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-rosso shadow-[0_0_10px_rgba(216,35,42,.9)]" />Object / {String(activeIndex + 1).padStart(2, '0')}
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-rosso shadow-[0_0_10px_rgba(216,35,42,.9)]" />Macchina / {String(activeIndex + 1).padStart(2, '0')}
                 </div>
                 <AnimatePresence mode="wait">
                   <motion.div key={selected.slug} initial={{ opacity: 0, y: 20, scale: 0.94, filter: 'blur(7px)' }} animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }} exit={{ opacity: 0, y: -10, scale: 1.03, filter: 'blur(5px)' }} transition={{ duration: 0.44, ease: [0.16, 1, 0.3, 1] }} className="absolute inset-[15%_7%_5%] sm:inset-[13%_8%_5%]">
@@ -99,7 +164,7 @@ export default function FeaturedProducts() {
               <AnimatePresence mode="wait">
                 <motion.div key={selected.slug} initial={{ opacity: 0, x: 14 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.34, ease: [0.16, 1, 0.3, 1] }} className="relative z-20 flex flex-col border-t border-white/10 bg-carbone/92 p-5 backdrop-blur-2xl sm:p-6 lg:border-l lg:border-t-0 lg:p-8">
                   <div className="flex items-center justify-between gap-4">
-                    <span className="text-[8px] font-bold uppercase tracking-[0.24em] text-rosso">Machine profile</span>
+                    <span className="text-[8px] font-bold uppercase tracking-[0.24em] text-rosso">Scheda rapida</span>
                     <Gauge size={15} className="text-white/[0.35]" />
                   </div>
                   <p className="mt-5 text-[9px] font-semibold uppercase tracking-[0.2em] text-white/[0.52] sm:mt-8 sm:tracking-[0.23em]">{selected.category}</p>
