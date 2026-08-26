@@ -1,39 +1,38 @@
 import Image from 'next/image';
 
 /**
- * Marchio Arredo Chef.
- * Esiste un solo asset ufficiale: il logo completo (icona + wordmark) in WebP.
- * NOTA: non esiste ancora un asset "solo icona"; quando sarà disponibile,
- * reintrodurre una prop dedicata con un secondo file reale.
- * `tone` è accettato per compatibilità con i chiamanti (Navbar) ma l'asset
- * attuale è unico e leggibile su entrambi i fondi.
+ * Logo ufficiale fornito da Arredo Chef.
+ * L'asset originale è quadrato ma il disegno occupa una fascia 1223×605:
+ * questa finestra CSS elimina lo spazio trasparente senza alterare il marchio.
  */
 export default function Logo({
-  size = 46,
-  tone: _tone = 'dark',
+  width = 176,
   className = '',
+  priority = false,
 }: {
-  size?: number;
-  /** 'dark' = fondo scuro · 'light' = fondo chiaro (riservato per asset futuri) */
-  tone?: 'dark' | 'light';
+  width?: number;
   className?: string;
+  priority?: boolean;
 }) {
-  const src = '/images/logo-mark.webp';
-  const w = size * 2.6;
-  const h = size;
-
   return (
     <span
-      className={`relative inline-flex shrink-0 transition-transform duration-500 ease-smooth ${className}`}
-      style={{ width: w, height: h }}
+      className={`relative inline-flex shrink-0 overflow-hidden ${className}`}
+      style={{ width, aspectRatio: '1223 / 605' }}
     >
       <Image
-        src={src}
+        src="/images/arredo-chef-logo-official.png"
         alt="Arredo Chef"
-        fill
-        sizes={`${w * 2}px`}
-        priority
-        className="object-contain object-left"
+        width={1254}
+        height={1254}
+        priority={priority}
+        sizes={`${width}px`}
+        className="pointer-events-none absolute max-w-none select-none"
+        style={{
+          width: '102.54%',
+          height: 'auto',
+          left: '-2.54%',
+          top: '-47.1%',
+        }}
       />
     </span>
   );

@@ -4,6 +4,7 @@ import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import WhatsAppButton from '@/components/WhatsAppButton';
+import BrandIntro from '@/components/BrandIntro';
 import { company } from '@/data/company';
 
 const display = Archivo({
@@ -85,12 +86,21 @@ const jsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="it" className={`${display.variable} ${body.variable}`}>
+    <html lang="it" className={`${display.variable} ${body.variable}`} suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{if(sessionStorage.getItem('arredo-chef.brand-intro.v1')==='seen'){document.documentElement.dataset.brandIntroSeen='1'}}catch(e){}",
+          }}
+        />
+      </head>
       <body className="font-sans antialiased">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <BrandIntro />
         <Navbar />
         <main>{children}</main>
         <Footer />

@@ -22,13 +22,13 @@ export default function CatalogoPage() {
           </>
         }
         lead="Cottura, refrigerazione, forni, lavaggio, vetrine e macchinari da banco. Ogni scheda è il punto di partenza per un preventivo su misura: nessun prezzo standard, perché nessun locale è standard."
-        image="/images/hero-4.webp"
+        image="/images/catalog-digital-stage-v1.webp"
         crumbs={[{ label: 'Catalogo' }]}
       />
 
       <Suspense
         fallback={
-          <div className="bg-avorio py-32 text-center text-sm text-carbone/45">
+          <div className="bg-carbone py-32 text-center text-sm text-white/40">
             Caricamento catalogo…
           </div>
         }

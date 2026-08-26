@@ -19,8 +19,8 @@ export default function PageHeader({
 }) {
   return (
     <section
-      data-nav-theme="light"
-      className="relative isolate min-h-[570px] overflow-hidden bg-avorio pb-20 pt-36 md:pt-44 lg:flex lg:min-h-[680px] lg:items-center"
+      data-nav-theme="dark"
+      className="relative isolate min-h-[570px] overflow-hidden bg-carbone pb-20 pt-36 text-avorio md:pt-44 lg:flex lg:min-h-[680px] lg:items-center"
     >
       <div className="absolute inset-0">
         <Image
@@ -31,27 +31,27 @@ export default function PageHeader({
           priority
           className="object-cover object-[66%_center] lg:object-center"
         />
-        <div className="hero-light-veil absolute inset-0" />
-        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-avorio to-transparent" />
+        <div className="page-portal-veil absolute inset-0" />
+        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-carbone/85 to-transparent" />
       </div>
-      <div className="blueprint-light pointer-events-none absolute inset-0 opacity-30" />
+      <div className="blueprint pointer-events-none absolute inset-0 opacity-55" />
 
       <div className="container-ac relative">
         <div className="max-w-[760px]">
           {crumbs.length > 0 && (
-            <nav className="mb-8 flex flex-wrap items-center gap-1.5 text-xs text-carbone/45">
+            <nav className="mb-8 flex flex-wrap items-center gap-1.5 text-xs text-white/38">
               <Link href="/" className="transition-colors hover:text-rosso">
                 Home
               </Link>
               {crumbs.map((c) => (
                 <span key={c.label} className="flex items-center gap-1.5">
-                  <ChevronRight size={12} className="text-carbone/20" />
+                  <ChevronRight size={12} className="text-white/18" />
                   {c.href ? (
                     <Link href={c.href} className="transition-colors hover:text-rosso">
                       {c.label}
                     </Link>
                   ) : (
-                    <span className="text-carbone/65">{c.label}</span>
+                    <span className="text-white/65">{c.label}</span>
                   )}
                 </span>
               ))}
@@ -64,18 +64,18 @@ export default function PageHeader({
               {eyebrow}
             </span>
           </div>
-          <h1 className="h-display mt-6 max-w-3xl text-[clamp(2.8rem,6vw,5.7rem)] text-carbone">
+          <h1 className="h-display mt-6 max-w-3xl text-[clamp(2.8rem,6vw,5.7rem)] text-avorio">
             {title}
           </h1>
           {lead && (
-            <p className="mt-7 max-w-xl text-pretty text-base leading-relaxed text-carbone/70 md:text-lg md:leading-relaxed">
+            <p className="mt-7 max-w-xl text-pretty text-base leading-relaxed text-white/58 md:text-lg md:leading-relaxed">
               {lead}
             </p>
           )}
         </div>
       </div>
 
-      <span className="absolute bottom-7 right-7 hidden text-[9px] font-bold uppercase tracking-widest2 text-carbone/35 lg:block">
+      <span className="absolute bottom-7 right-7 hidden text-[9px] font-bold uppercase tracking-widest2 text-white/28 lg:block">
         Arredo Chef · Kitchen systems
       </span>
     </section>

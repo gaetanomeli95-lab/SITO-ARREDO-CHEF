@@ -29,7 +29,7 @@ export default function Footer() {
         <div className="grid gap-8 sm:gap-10 lg:grid-cols-[1.5fr_1fr_1fr_1.1fr]">
           {/* Marchio */}
           <div>
-            <Logo size={58} tone="dark" />
+            <Logo width={210} />
 
             <p className="mt-6 max-w-sm text-pretty text-sm leading-relaxed text-cenere/65">
               Attrezzature professionali nuove e usate per ristoranti, bar, hotel e ogni realtà del

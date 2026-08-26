@@ -6,7 +6,6 @@ import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion, useScroll, useSpring } from 'framer-motion';
 import { ArrowRight, Menu, Phone, X } from 'lucide-react';
 import { company, navLinks } from '@/data/company';
-import { useNavTheme } from '@/hooks/useNavTheme';
 import Logo from '@/components/Logo';
 import ProjectIndicator from '@/components/project/ProjectIndicator';
 
@@ -14,7 +13,6 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
-  const tone = useNavTheme('light');
 
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 200, damping: 40, mass: 0.4 });
@@ -35,19 +33,9 @@ export default function Navbar() {
     };
   }, [open]);
 
-  const isDark = tone === 'dark';
-
-  // Colori derivati dal tono della sezione sottostante
   const shell = scrolled
-    ? isDark
-      ? 'border-white/10 bg-carbone/[0.86] shadow-lift-sm backdrop-blur-2xl'
-      : 'border-carbone/10 bg-avorio/[0.9] shadow-lift-sm backdrop-blur-2xl'
-    : isDark
-      ? 'border-white/10 bg-carbone/55 backdrop-blur-xl'
-      : 'border-white/70 bg-white/45 shadow-lift-sm backdrop-blur-xl';
-
-  const linkIdle = isDark ? 'text-avorio/65 hover:text-avorio' : 'text-carbone/60 hover:text-carbone';
-  const linkActive = isDark ? 'text-avorio' : 'text-carbone';
+    ? 'border-white/12 bg-carbone/[0.9] shadow-[0_24px_70px_-30px_rgba(0,0,0,.9)] backdrop-blur-2xl'
+    : 'border-white/10 bg-carbone/[0.7] backdrop-blur-xl';
 
   return (
     <>
@@ -55,16 +43,27 @@ export default function Navbar() {
         className="pointer-events-none fixed inset-x-0 top-0 z-50 px-3 pt-3 transition-all duration-500 ease-smooth md:px-5"
       >
         <nav
-          className={`container-ac pointer-events-auto flex items-center justify-between gap-4 rounded-[22px] border !px-3 transition-all duration-500 ease-smooth md:!px-4 ${shell} ${
-            scrolled ? 'py-2' : 'py-2.5'
+          className={`container-ac pointer-events-auto relative flex items-center justify-between gap-4 overflow-hidden rounded-[24px] border !px-4 transition-all duration-500 ease-smooth md:!px-5 ${shell} ${
+            scrolled ? 'py-1.5' : 'py-2.5'
           }`}
         >
+          <span className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white/35 to-transparent" />
           <Link
             href="/"
             aria-label="Arredo Chef — home"
-            className="group relative z-10 rounded-2xl bg-carbone px-3 py-1.5 shadow-lift-sm"
+            className="group relative z-10 flex items-center gap-4"
           >
-            <Logo size={scrolled ? 31 : 34} tone="dark" />
+            <Logo
+              width={scrolled ? 148 : 172}
+              priority
+              className="transition-all duration-500 ease-smooth group-hover:drop-shadow-[0_0_20px_rgba(216,35,42,.28)]"
+            />
+            <span className="hidden h-8 w-px bg-white/12 2xl:block" />
+            <span className="hidden text-[7px] font-bold uppercase leading-[1.7] tracking-[0.32em] text-white/38 2xl:block">
+              Professional
+              <br />
+              kitchen systems
+            </span>
           </Link>
 
           {/* Link desktop */}
@@ -76,7 +75,7 @@ export default function Navbar() {
                   key={l.href}
                   href={l.href}
                   className={`relative px-3.5 py-2 text-sm font-medium transition-colors duration-300 ${
-                    active ? linkActive : linkIdle
+                    active ? 'text-white' : 'text-avorio/55 hover:text-white'
                   }`}
                 >
                   {l.label}
@@ -94,29 +93,19 @@ export default function Navbar() {
 
           {/* Azioni desktop */}
           <div className="hidden items-center gap-3 lg:flex">
-            <ProjectIndicator tone={tone} />
+            <ProjectIndicator tone="dark" />
             <a
               href={`tel:${company.phones.marketing.tel}`}
-              className={`group hidden items-center gap-2.5 rounded-full border py-2 pl-2 pr-5 transition-all duration-300 ease-smooth xl:flex ${
-                isDark
-                  ? 'border-white/15 hover:border-oro/45 hover:bg-white/[0.06]'
-                  : 'border-carbone/12 hover:border-rosso/40 hover:bg-carbone/[0.04]'
-              }`}
+              className="group hidden items-center gap-2.5 rounded-full border border-white/12 py-2 pl-2 pr-5 transition-all duration-300 ease-smooth hover:border-rosso/50 hover:bg-white/[0.05] xl:flex"
             >
               <span className="flex h-8 w-8 items-center justify-center rounded-full bg-rosso text-white">
                 <Phone size={13} strokeWidth={2.5} />
               </span>
               <span className="flex flex-col leading-none">
-                <span
-                  className={`text-[8.5px] font-semibold uppercase tracking-widest ${
-                    isDark ? 'text-avorio/45' : 'text-carbone/45'
-                  }`}
-                >
+                <span className="text-[8.5px] font-semibold uppercase tracking-widest text-avorio/40">
                   Chiamaci ora
                 </span>
-                <span
-                  className={`mt-1 text-[13px] font-bold ${isDark ? 'text-avorio' : 'text-carbone'}`}
-                >
+                <span className="mt-1 text-[13px] font-bold text-avorio">
                   {company.phones.marketing.display}
                 </span>
               </span>
@@ -129,13 +118,11 @@ export default function Navbar() {
 
           {/* Menu mobile */}
           <div className="flex items-center gap-2 lg:hidden">
-            <ProjectIndicator tone={tone} />
+            <ProjectIndicator tone="dark" />
             <button
               onClick={() => setOpen(true)}
               aria-label="Apri menu"
-              className={`relative z-10 flex h-11 w-11 items-center justify-center rounded-full border transition-colors ${
-                isDark ? 'border-white/18 text-avorio' : 'border-carbone/15 text-carbone'
-              }`}
+              className="relative z-10 flex h-11 w-11 items-center justify-center rounded-full border border-white/18 text-avorio transition-colors hover:border-rosso/55"
             >
               <Menu size={19} />
             </button>
@@ -167,7 +154,7 @@ export default function Navbar() {
 
             <div className="relative flex h-full flex-col">
               <div className="container-ac flex items-center justify-between py-4">
-                <Logo size={44} tone="dark" />
+                <Logo width={176} priority />
                 <button
                   onClick={() => setOpen(false)}
                   aria-label="Chiudi menu"

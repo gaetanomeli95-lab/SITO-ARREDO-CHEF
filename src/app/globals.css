@@ -50,6 +50,10 @@
   ::-webkit-scrollbar-thumb:hover {
     background: var(--rosso);
   }
+
+  html[data-brand-intro-seen='1'] .brand-intro {
+    display: none;
+  }
 }
 
 @layer components {
@@ -131,6 +135,30 @@
   .panel-cut {
     border-radius: 24px;
     clip-path: polygon(0 0, calc(100% - 34px) 0, 100% 34px, 100% 100%, 0 100%);
+  }
+
+  .digital-panel {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    background:
+      linear-gradient(145deg, rgba(57, 65, 76, 0.38), rgba(20, 24, 29, 0.9) 48%, rgba(7, 8, 10, 0.96)),
+      rgba(11, 13, 16, 0.84);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 36px 90px -42px rgba(0, 0, 0, 0.95);
+    clip-path: polygon(0 0, calc(100% - 28px) 0, 100% 28px, 100% 100%, 0 100%);
+  }
+  .digital-panel::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 42%;
+    height: 1px;
+    background: linear-gradient(90deg, #d8232a, transparent);
+    box-shadow: 0 0 18px rgba(216, 35, 42, 0.55);
   }
 }
 
@@ -245,18 +273,25 @@
     scroll-snap-align: start;
   }
 
-  .hero-light-veil {
+  .hero-portal-veil {
     background:
-      linear-gradient(90deg, rgba(245,242,237,1) 0%, rgba(245,242,237,0.98) 28%, rgba(245,242,237,0.84) 43%, rgba(245,242,237,0.18) 68%, rgba(245,242,237,0) 100%),
-      linear-gradient(180deg, rgba(245,242,237,0.22), rgba(245,242,237,0));
+      linear-gradient(90deg, rgba(6,7,9,0.97) 0%, rgba(8,9,11,0.9) 30%, rgba(11,13,16,0.62) 48%, rgba(11,13,16,0.16) 72%, rgba(11,13,16,0.05) 100%),
+      linear-gradient(180deg, rgba(6,7,9,0.26), rgba(6,7,9,0.02) 58%, rgba(6,7,9,0.28));
+  }
+
+  .page-portal-veil {
+    background:
+      linear-gradient(90deg, rgba(8,9,11,0.96) 0%, rgba(11,13,16,0.86) 36%, rgba(11,13,16,0.42) 62%, rgba(11,13,16,0.18) 100%),
+      linear-gradient(180deg, rgba(6,7,9,0.28), rgba(6,7,9,0.08) 55%, rgba(6,7,9,0.42));
   }
 }
 
 @media (max-width: 1023px) {
-  .hero-light-veil {
+  .hero-portal-veil,
+  .page-portal-veil {
     background:
-      linear-gradient(90deg, rgba(245,242,237,0.98) 0%, rgba(245,242,237,0.93) 54%, rgba(245,242,237,0.56) 100%),
-      linear-gradient(180deg, rgba(245,242,237,0.18), rgba(245,242,237,0.72));
+      linear-gradient(90deg, rgba(7,8,10,0.86) 0%, rgba(8,9,11,0.72) 58%, rgba(8,9,11,0.48) 100%),
+      linear-gradient(180deg, rgba(7,8,10,0.4), rgba(7,8,10,0.08) 48%, rgba(7,8,10,0.72));
   }
 }
 
