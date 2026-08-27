@@ -131,10 +131,6 @@
     display: none;
   }
 
-  .animate-marquee {
-    animation-play-state: paused !important;
-    will-change: auto !important;
-  }
 }
 
 @media (min-width: 768px) {
