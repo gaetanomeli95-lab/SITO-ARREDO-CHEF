@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { AnimatePresence, motion, useScroll, useSpring } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowRight, Menu, Phone, X } from 'lucide-react';
 import { company, navLinks } from '@/data/company';
 import Logo from '@/components/Logo';
@@ -14,11 +14,11 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
-  const { scrollYProgress } = useScroll();
-  const progress = useSpring(scrollYProgress, { stiffness: 200, damping: 40, mass: 0.4 });
-
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => {
+      const next = window.scrollY > 20;
+      setScrolled((current) => (current === next ? current : next));
+    };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
@@ -103,10 +103,6 @@ export default function Navbar() {
           </div>
         </nav>
 
-        <motion.div
-          style={{ scaleX: progress }}
-          className={`absolute bottom-0 left-7 right-7 h-[2px] origin-left bg-rosso ${scrolled ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
-        />
       </header>
 
       <AnimatePresence>
