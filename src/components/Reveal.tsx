@@ -1,7 +1,7 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import type { ReactNode } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 
 type Props = {
   children: ReactNode;
@@ -18,15 +18,46 @@ export default function Reveal({
   className,
   once = true,
 }: Props) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+
+    const mobileOrReducedMotion = window.matchMedia(
+      '(max-width: 767px), (prefers-reduced-motion: reduce)'
+    ).matches;
+
+    if (mobileOrReducedMotion || !('IntersectionObserver' in window)) {
+      setVisible(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setVisible(entry.isIntersecting);
+        if (entry.isIntersecting && once) observer.unobserve(element);
+      },
+      { rootMargin: '0px 0px -80px 0px' }
+    );
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [once]);
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once, margin: '-80px' }}
-      transition={{ duration: 0.75, delay, ease: [0.16, 1, 0.3, 1] }}
-      className={`reveal-motion ${className ?? ''}`}
+    <div
+      ref={ref}
+      style={
+        {
+          '--reveal-y': `${y}px`,
+          '--reveal-delay': `${delay}s`,
+        } as CSSProperties
+      }
+      className={`reveal-motion ${visible ? 'reveal-visible' : ''} ${className ?? ''}`}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }

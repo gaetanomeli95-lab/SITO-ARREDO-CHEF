@@ -128,40 +128,38 @@ export default function ProcessSection() {
                     <ChevronDown size={18} className={`shrink-0 text-carbone/45 transition-transform duration-300 ${isActive ? 'rotate-180 text-rosso' : ''}`} />
                   </button>
 
-                  <AnimatePresence initial={false}>
-                    {isActive && (
-                      <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.34, ease: [0.16, 1, 0.3, 1] }} className="overflow-hidden">
-                        <div className="border-t border-carbone/10 px-5 pb-5 pt-4">
-                          <p className="text-[13px] leading-relaxed text-carbone/65">{step.text}</p>
-                          <div className="mt-5 grid gap-3">
-                            <div className="rounded-2xl bg-[#eef0f1] p-4">
-                              <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-carbone/42">Cosa ci serve da te</p>
-                              <ul className="mt-3 space-y-2">
-                                {d.client.map((item) => (
-                                  <li key={item} className="flex gap-2.5 text-[12px] leading-relaxed text-carbone/70"><span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-rosso" />{item}</li>
-                                ))}
-                              </ul>
-                            </div>
-                            <div className="rounded-2xl bg-[#171c22] p-4 text-white">
-                              <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/[0.48]">Cosa fa Arredo Chef</p>
-                              <ul className="mt-3 space-y-2">
-                                {d.arredoChef.map((item) => (
-                                  <li key={item} className="flex gap-2.5 text-[12px] leading-relaxed text-white/[0.78]"><CheckCircle2 size={14} className="mt-0.5 shrink-0 text-rosso" />{item}</li>
-                                ))}
-                              </ul>
-                            </div>
+                  {isActive && (
+                    <div className="overflow-hidden">
+                      <div className="border-t border-carbone/10 px-5 pb-5 pt-4">
+                        <p className="text-[13px] leading-relaxed text-carbone/65">{step.text}</p>
+                        <div className="mt-5 grid gap-3">
+                          <div className="rounded-2xl bg-[#eef0f1] p-4">
+                            <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-carbone/42">Cosa ci serve da te</p>
+                            <ul className="mt-3 space-y-2">
+                              {d.client.map((item) => (
+                                <li key={item} className="flex gap-2.5 text-[12px] leading-relaxed text-carbone/70"><span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-rosso" />{item}</li>
+                              ))}
+                            </ul>
                           </div>
-                          <div className="mt-4 flex items-start gap-3 border-t border-carbone/10 pt-4">
-                            <PackageCheck size={18} className="mt-0.5 shrink-0 text-rosso" />
-                            <div>
-                              <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-carbone/40">Risultato della fase</p>
-                              <p className="mt-1.5 text-[12px] font-semibold leading-relaxed text-carbone/75">{d.output}</p>
-                            </div>
+                          <div className="rounded-2xl bg-[#171c22] p-4 text-white">
+                            <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/[0.48]">Cosa fa Arredo Chef</p>
+                            <ul className="mt-3 space-y-2">
+                              {d.arredoChef.map((item) => (
+                                <li key={item} className="flex gap-2.5 text-[12px] leading-relaxed text-white/[0.78]"><CheckCircle2 size={14} className="mt-0.5 shrink-0 text-rosso" />{item}</li>
+                              ))}
+                            </ul>
                           </div>
                         </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                        <div className="mt-4 flex items-start gap-3 border-t border-carbone/10 pt-4">
+                          <PackageCheck size={18} className="mt-0.5 shrink-0 text-rosso" />
+                          <div>
+                            <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-carbone/40">Risultato della fase</p>
+                            <p className="mt-1.5 text-[12px] font-semibold leading-relaxed text-carbone/75">{d.output}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </article>
               </Reveal>
             );

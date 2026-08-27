@@ -114,11 +114,6 @@
 }
 
 @media (max-width: 767px) {
-  main > section {
-    content-visibility: auto;
-    contain-intrinsic-size: 900px;
-  }
-
   .reveal-motion {
     opacity: 1 !important;
     transform: none !important;
@@ -131,6 +126,31 @@
   }
 
   .grain::after { display: none; }
+
+  main > section > .pointer-events-none[class*="blur-"] {
+    display: none;
+  }
+
+  .animate-marquee {
+    animation-play-state: paused !important;
+    will-change: auto !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .reveal-motion {
+    opacity: 0;
+    transform: translate3d(0, var(--reveal-y, 26px), 0);
+    transition:
+      opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: var(--reveal-delay, 0s);
+  }
+
+  .reveal-motion.reveal-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
 }
 
 @media (max-width: 1023px) {
