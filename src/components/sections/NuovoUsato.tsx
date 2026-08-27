@@ -81,7 +81,7 @@ export default function NuovoUsato() {
         <Reveal delay={0.08}>
           <div className="mt-10 overflow-hidden rounded-[26px] border border-carbone/10 bg-white/75 shadow-[0_40px_100px_-55px_rgba(11,13,16,.45)] backdrop-blur-xl sm:mt-12 sm:rounded-[30px] lg:mt-16">
             <div className="grid lg:grid-cols-[230px_minmax(0,1fr)_410px]">
-              <div className="flex gap-2 overflow-x-auto border-b border-carbone/10 bg-[#dfe2e3]/75 p-3 lg:flex-col lg:overflow-visible lg:border-b-0 lg:border-r lg:p-4">
+              <div className="grid grid-cols-3 gap-2 border-b border-carbone/10 bg-[#dfe2e3]/75 p-2.5 sm:p-3 lg:flex lg:flex-col lg:border-b-0 lg:border-r lg:p-4">
                 <div className="mb-2 hidden px-3 py-2 text-[9px] font-bold uppercase tracking-[0.24em] text-carbone/40 lg:block">Scegli strategia</div>
                 {strategies.map((item, i) => {
                   const SelectedIcon = item.icon;
@@ -92,13 +92,13 @@ export default function NuovoUsato() {
                       type="button"
                       onClick={() => setActive(i)}
                       aria-pressed={selected}
-                      className={`group min-w-[160px] rounded-[18px] border p-4 text-left transition-all duration-300 lg:min-w-0 ${selected ? 'border-rosso/35 bg-white shadow-[0_18px_40px_-28px_rgba(11,13,16,.45)]' : 'border-transparent bg-white/25 hover:border-carbone/10 hover:bg-white/55'}`}
+                      className={`group min-w-0 rounded-[16px] border p-2.5 text-left transition-all duration-300 sm:rounded-[18px] sm:p-4 ${selected ? 'border-rosso/35 bg-white shadow-[0_18px_40px_-28px_rgba(11,13,16,.45)]' : 'border-transparent bg-white/25 hover:border-carbone/10 hover:bg-white/55'}`}
                     >
                       <div className="flex items-center justify-between gap-3">
                         <span className={`flex h-9 w-9 items-center justify-center rounded-xl ${selected ? 'bg-rosso text-white' : 'bg-carbone text-white'}`}><SelectedIcon size={16} /></span>
                         <span className={`text-[9px] font-bold uppercase tracking-[0.2em] ${selected ? 'text-rosso' : 'text-carbone/35'}`}>0{i + 1}</span>
                       </div>
-                      <span className="mt-4 block font-display text-[1rem] font-extrabold text-carbone">{item.short}</span>
+                      <span className="mt-3 flex min-h-10 items-center font-display text-[11px] font-extrabold leading-tight text-carbone sm:mt-4 sm:min-h-0 sm:text-[1rem] lg:block">{item.short}</span>
                     </button>
                   );
                 })}
