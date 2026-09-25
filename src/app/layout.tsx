@@ -20,7 +20,7 @@ const body = Inter({
   display: 'swap',
 });
 
-const siteUrl = 'https://www.arredochef.it';
+const siteUrl = 'https://arredochef.it';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
