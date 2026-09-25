@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/api/', '/privacy', '/cookie', '/progetto'],
     },
-    sitemap: 'https://www.arredochefsrls.it/sitemap.xml',
+    sitemap: 'https://www.arredochef.it/sitemap.xml',
   };
 }
