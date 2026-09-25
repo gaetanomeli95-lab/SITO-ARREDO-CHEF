@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { products } from '@/data/products';
 
-const base = 'https://www.arredochef.it';
+const base = 'https://arredochef.it';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
