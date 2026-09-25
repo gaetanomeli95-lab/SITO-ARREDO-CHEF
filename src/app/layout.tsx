@@ -38,6 +38,11 @@ export const metadata: Metadata = {
     'arredo inox Palermo',
     'refrigerazione professionale',
   ],
+  icons: {
+    icon: [{ url: '/images/logo-mark.png', type: 'image/png' }],
+    shortcut: '/images/logo-mark.png',
+    apple: '/images/logo-mark.png',
+  },
   openGraph: {
     type: 'website',
     locale: 'it_IT',
